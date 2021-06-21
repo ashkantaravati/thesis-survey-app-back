@@ -14,7 +14,7 @@ class TeamInfoViewSet(viewsets.ReadOnlyModelViewSet):
 
 class CreateOrganizationView(generics.ListCreateAPIView):
     """
-    A View for subnitting an organization, its teams and initial data for team members
+    A View for submitting an organization, its teams and initial data for team members
     """
 
     queryset = Organization.objects.all()
