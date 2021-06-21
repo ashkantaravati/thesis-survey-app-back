@@ -25,7 +25,6 @@ class TeamSerializer(serializers.ModelSerializer):
     members = ParticipantTeamMemberSerializer(
         many=True,
         read_only=True,
-        source="participantteammember_set",
     )
 
     organization = OrganizationSerializer(
@@ -83,3 +82,7 @@ class OrganizationRegistrationSerializer(serializers.ModelSerializer):
                 )
 
         return organization
+
+
+class TeamMemberParticipationSerializer(serializers.ModelSerializer):
+    pass
