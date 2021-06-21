@@ -18,7 +18,9 @@ class Organization(models.Model):
 class Team(models.Model):
     id = HashidAutoField(primary_key=True)
     name = models.CharField(max_length=50)
-    organization = models.ForeignKey(to=Organization, on_delete=models.DO_NOTHING)
+    organization = models.ForeignKey(
+        to=Organization, related_name="teams", on_delete=models.DO_NOTHING
+    )
 
     def __str__(self) -> str:
         return f"{self.name} - {self.id} | {self.organization}"
@@ -29,7 +31,9 @@ class ParticipantTeamMember(models.Model):
     name = models.CharField(max_length=50)
     age = models.IntegerField(null=True, blank=True)
     sex = models.CharField(choices=SEX_CHOICES, max_length=10, null=True, blank=True)
-    team = models.ForeignKey(to=Team, on_delete=models.DO_NOTHING)
+    team = models.ForeignKey(
+        to=Team, related_name="members", on_delete=models.DO_NOTHING
+    )
     organization = models.ForeignKey(to=Organization, on_delete=models.DO_NOTHING)
     overconfidence_question_1_min = models.IntegerField(null=True, blank=True)
     overconfidence_question_1_max = models.IntegerField(null=True, blank=True)

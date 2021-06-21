@@ -1,6 +1,6 @@
-from rest_framework import viewsets
-from .models import Team
-from .serializers import TeamSerializer
+from rest_framework import viewsets, generics
+from .models import Organization, Team
+from .serializers import OrganizationRegistrationSerializer, TeamSerializer
 
 
 class TeamInfoViewSet(viewsets.ReadOnlyModelViewSet):
@@ -10,3 +10,12 @@ class TeamInfoViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+
+
+class CreateOrganizationView(generics.ListCreateAPIView):
+    """
+    A View for subnitting an organization, its teams and initial data for team members
+    """
+
+    queryset = Organization.objects.all()
+    serializer_class = OrganizationRegistrationSerializer
