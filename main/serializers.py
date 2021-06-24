@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import ParticipantTeamMember, Team, Organization
 from hashid_field.rest import HashidSerializerCharField
 
+SURVEY_LINK_BASE_URL = "http://localhost:8080/participate/"
+
 
 class ParticipantTeamMemberSerializer(serializers.ModelSerializer):
     id = HashidSerializerCharField()
@@ -47,6 +49,10 @@ class InitialTeamMemberRegistrationSerializer(serializers.ModelSerializer):
 
 class TeamRegistrationSerializer(serializers.ModelSerializer):
     id = HashidSerializerCharField(read_only=True)
+    link = serializers.SerializerMethodField("get_survey_link", read_only=True)
+
+    def get_survey_link(self, obj):
+        return SURVEY_LINK_BASE_URL + str(obj.id)
 
     members = InitialTeamMemberRegistrationSerializer(
         many=True,
@@ -54,7 +60,7 @@ class TeamRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Team
-        fields = ["id", "name", "members"]
+        fields = ["id", "name", "members", "link"]
         depth = 1
 
 
