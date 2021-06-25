@@ -12,7 +12,7 @@ class Organization(models.Model):
     rep_job_title = models.CharField(max_length=50)
 
     def __str__(self) -> str:
-        return f"{self.name} - {self.id}"
+        return f"{self.name} "
 
 
 class Team(models.Model):
@@ -23,7 +23,7 @@ class Team(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.name} - {self.id} | {self.organization}"
+        return f"{self.name} مربوط به {self.organization}"
 
 
 class ParticipantTeamMember(models.Model):
@@ -61,6 +61,9 @@ class ParticipantTeamMember(models.Model):
     team_coordination_question_4 = models.IntegerField(null=True, blank=True)
     team_coordination_question_5 = models.IntegerField(null=True, blank=True)
 
+    def __str__(self) -> str:
+        return f"{self.name} از تیم {self.team}"
+
 
 class TeamMemberVoiceEvaluationByParticipant(models.Model):
     voice_question_1 = models.IntegerField()
@@ -80,3 +83,6 @@ class TeamMemberVoiceEvaluationByParticipant(models.Model):
         related_name="voice_evaluations_about_participant",
     )
     team = models.ForeignKey(to=Team, on_delete=models.DO_NOTHING)
+
+    def __str__(self) -> str:
+        return f"نظر {self.evaluating_participant} درباره‌ی رفتار صدای {self.evaluated_participant}"
