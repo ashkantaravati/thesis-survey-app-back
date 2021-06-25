@@ -72,11 +72,11 @@ class TeamMemberVoiceEvaluationByParticipant(models.Model):
     evaluating_participant = models.ForeignKey(
         to=ParticipantTeamMember,
         on_delete=models.DO_NOTHING,
-        related_name="evaluating_participant",
+        related_name="voice_evaluations_by_participant",
     )
     evaluated_participant = models.ForeignKey(
         to=ParticipantTeamMember,
         on_delete=models.DO_NOTHING,
-        related_name="evaluated_participant",
+        related_name="voice_evaluations_about_participant",
     )
     team = models.ForeignKey(to=Team, on_delete=models.DO_NOTHING)
