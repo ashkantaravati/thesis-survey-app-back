@@ -1,6 +1,10 @@
 from rest_framework import viewsets, generics
-from .models import Organization, Team
-from .serializers import OrganizationRegistrationSerializer, TeamSerializer
+from .models import Organization, ParticipantTeamMember, Team
+from .serializers import (
+    OrganizationRegistrationSerializer,
+    TeamMemberParticipationSerializer,
+    TeamSerializer,
+)
 
 
 class TeamInfoViewSet(viewsets.ReadOnlyModelViewSet):
@@ -19,3 +23,12 @@ class CreateOrganizationView(generics.ListCreateAPIView):
 
     queryset = Organization.objects.all()
     serializer_class = OrganizationRegistrationSerializer
+
+
+class SurveyParticipationView(generics.RetrieveUpdateAPIView):
+    """
+    A View for submitting a the answers of a participant from a team within an organization to the survey's questions
+    """
+
+    queryset = ParticipantTeamMember.objects.all()
+    serializer_class = TeamMemberParticipationSerializer
