@@ -7,7 +7,7 @@ DEBUG = True
 
 HASHID_FIELD_SALT = "a1+l-o$qehsv9iugyzpeit7xivomcc6#k#q9%)#7#8ftkg#i@!"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["thesis.ashkantaravati.ir", "localhost"]
 INSTALLED_APPS = [
     "main",
     "django.contrib.admin",
