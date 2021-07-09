@@ -12,6 +12,7 @@ from .models import (
 from hashid_field.rest import HashidSerializerCharField
 
 SURVEY_LINK_BASE_URL = "http://localhost:8080/participate/"
+# TODO retire generation of link in backend
 
 
 class ParticipantTeamMemberSerializer(serializers.ModelSerializer):

@@ -41,6 +41,7 @@ class ParticipantTeamMember(models.Model):
 class GeneralSurveyResponse(models.Model):
     age = models.IntegerField(null=True, blank=True)
     sex = models.CharField(choices=SEX_CHOICES, max_length=10, null=True, blank=True)
+    # TODO add tenure and team history
     participant = models.OneToOneField(
         to=ParticipantTeamMember,
         on_delete=models.CASCADE,
