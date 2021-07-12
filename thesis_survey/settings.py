@@ -33,6 +33,8 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
+    "https://survey.ashkantaravati.ir",
+    "http://survey.ashkantaravati.ir",
 ]
 
 ROOT_URLCONF = "thesis_survey.urls"
