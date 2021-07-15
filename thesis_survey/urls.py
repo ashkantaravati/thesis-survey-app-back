@@ -9,7 +9,7 @@ from django.urls import path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("organizations", CreateOrganizationView.as_view()),
+    path("organizations/", CreateOrganizationView.as_view()),
     path("responses/<str:pk>", SurveyParticipationView.as_view()),
 ]
 
