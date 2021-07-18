@@ -28,6 +28,7 @@ class Team(models.Model):
 
 class ParticipantTeamMember(models.Model):
     id = HashidAutoField(primary_key=True)
+    has_participated = models.BooleanField(default=False)
     name = models.CharField(max_length=50)
     team = models.ForeignKey(
         to=Team, related_name="members", on_delete=models.DO_NOTHING
@@ -47,6 +48,9 @@ class GeneralSurveyResponse(models.Model):
         on_delete=models.CASCADE,
         related_name="general_survey_response",
     )
+
+    def __str__(self):
+        return f"پرسش‌های عمومی مربوط به {self.participant}  "
 
 
 class OverconfidenceSurveyResponse(models.Model):
