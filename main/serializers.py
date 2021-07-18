@@ -23,6 +23,21 @@ class ParticipantTeamMemberSerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
+class NotParticipatedListSerializer(serializers.ListSerializer):
+    def to_representation(self, data):
+        data = data.filter(has_participated=False)
+        return super(NotParticipatedListSerializer, self).to_representation(data)
+
+
+class NonParticipatedTeamMemberSerializer(serializers.ModelSerializer):
+    id = HashidSerializerCharField()
+
+    class Meta:
+        list_serializer_class = NotParticipatedListSerializer
+        model = ParticipantTeamMember
+        fields = ["id", "name"]
+
+
 class OrganizationSerializer(serializers.ModelSerializer):
     id = HashidSerializerCharField()
 
@@ -34,7 +49,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
     id = HashidSerializerCharField()
 
-    members = ParticipantTeamMemberSerializer(
+    members = NonParticipatedTeamMemberSerializer(
         many=True,
         read_only=True,
     )
@@ -138,10 +153,12 @@ class TeamMemberParticipationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ParticipantTeamMember
-        exclude = ["organization", "team"]
+        exclude = ["organization", "team", "has_participated"]
         depth = 2
 
     def update(self, instance, validated_data):
+        if instance.has_participated:
+            raise serializers.ValidationError("Already participated")
         voice_survey_responses = validated_data.get("voice_survey_responses")
         for voice_survey_response in voice_survey_responses:
             evaluated_participant_data = voice_survey_response.pop(
@@ -166,5 +183,6 @@ class TeamMemberParticipationSerializer(serializers.ModelSerializer):
             participant=instance,
             **validated_data.get("team_coordination_survey_response")
         )
+        instance.has_participated = True
         instance.save()
         return instance
