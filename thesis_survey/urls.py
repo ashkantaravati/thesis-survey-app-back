@@ -2,15 +2,19 @@ from rest_framework import routers
 from main.views import CreateOrganizationView, SurveyParticipationView, TeamInfoViewSet
 
 router = routers.SimpleRouter()
-router.register(r"teams", TeamInfoViewSet)
+router.register(
+    r"teams",
+    TeamInfoViewSet,
+)
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("organizations/", CreateOrganizationView.as_view()),
-    path("responses/<str:pk>", SurveyParticipationView.as_view()),
+    path("api/organizations/", CreateOrganizationView.as_view()),
+    path("api/responses/<str:pk>", SurveyParticipationView.as_view()),
+    path("api/", include(router.urls)),
 ]
 
 urlpatterns += router.urls
