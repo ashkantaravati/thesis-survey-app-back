@@ -10,12 +10,25 @@ from .models import (
 )
 
 admin.site.register(Organization)
-admin.site.register(Team)
+# admin.site.register(Team)
 # admin.site.register(TeamMemberVoiceEvaluationByParticipant)
 # admin.site.register(ParticipantTeamMember)
 # admin.site.register(GeneralSurveyResponse)
 # admin.site.register(OverconfidenceSurveyResponse)
 # admin.site.register(TeamCoordinationSurveyResponse)
+
+
+class TeamMemberInline(admin.StackedInline):
+    model = ParticipantTeamMember
+    can_delete = False
+
+
+@admin.register(Team)
+class TeamAdmin(admin.ModelAdmin):
+
+    inlines = [
+        TeamMemberInline,
+    ]
 
 
 class GeneralSurveyResponseInline(admin.StackedInline):
