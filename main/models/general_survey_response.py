@@ -8,6 +8,8 @@ class GeneralSurveyResponse(models.Model):
     age = models.IntegerField(null=True, blank=True)
     sex = models.CharField(choices=SEX_CHOICES, max_length=10, null=True, blank=True)
     # TODO add tenure and team history
+    tenure = models.FloatField(default=0.0)
+    team_history = models.IntegerField(default=0)
     participant = models.OneToOneField(
         to=ParticipantTeamMember,
         on_delete=models.CASCADE,
