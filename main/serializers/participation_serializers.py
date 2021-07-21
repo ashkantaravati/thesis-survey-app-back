@@ -1,18 +1,13 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import (
-    GeneralSurveyResponse,
-    OverconfidenceSurveyResponse,
+from main.models import (
     ParticipantTeamMember,
-    Team,
-    Organization,
-    TeamCoordinationSurveyResponse,
     TeamMemberVoiceEvaluationByParticipant,
+    GeneralSurveyResponse,
+    TeamCoordinationSurveyResponse,
+    OverconfidenceSurveyResponse,
 )
 from hashid_field.rest import HashidSerializerCharField
-
-SURVEY_LINK_BASE_URL = "http://localhost:8080/participate/"
-# TODO retire generation of link in backend
 
 
 class ParticipantTeamMemberSerializer(serializers.ModelSerializer):
@@ -21,98 +16,6 @@ class ParticipantTeamMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParticipantTeamMember
         fields = ["id", "name"]
-
-
-class NotParticipatedListSerializer(serializers.ListSerializer):
-    def to_representation(self, data):
-        data = data.filter(has_participated=False)
-        return super(NotParticipatedListSerializer, self).to_representation(data)
-
-
-class NonParticipatedTeamMemberSerializer(serializers.ModelSerializer):
-    id = HashidSerializerCharField()
-
-    class Meta:
-        list_serializer_class = NotParticipatedListSerializer
-        model = ParticipantTeamMember
-        fields = ["id", "name"]
-
-
-class OrganizationSerializer(serializers.ModelSerializer):
-    id = HashidSerializerCharField()
-
-    class Meta:
-        model = Organization
-        fields = ["id", "name"]
-
-
-class TeamSerializer(serializers.ModelSerializer):
-    id = HashidSerializerCharField()
-
-    members = NonParticipatedTeamMemberSerializer(
-        many=True,
-        read_only=True,
-    )
-
-    organization = OrganizationSerializer(
-        read_only=True,
-    )
-
-    class Meta:
-        model = Team
-        fields = ["id", "name", "members", "organization"]
-        depth = 1
-
-
-class InitialTeamMemberRegistrationSerializer(serializers.ModelSerializer):
-    id = HashidSerializerCharField(read_only=True)
-
-    class Meta:
-        model = ParticipantTeamMember
-        fields = ["id", "name"]
-
-
-class TeamRegistrationSerializer(serializers.ModelSerializer):
-    id = HashidSerializerCharField(read_only=True)
-    link = serializers.SerializerMethodField("get_survey_link", read_only=True)
-
-    def get_survey_link(self, obj):
-        return SURVEY_LINK_BASE_URL + str(obj.id)
-
-    members = InitialTeamMemberRegistrationSerializer(
-        many=True,
-    )
-
-    class Meta:
-        model = Team
-        fields = ["id", "name", "members", "link"]
-        depth = 1
-
-
-class OrganizationRegistrationSerializer(serializers.ModelSerializer):
-    id = HashidSerializerCharField(read_only=True)
-
-    teams = TeamRegistrationSerializer(
-        many=True,
-    )
-
-    class Meta:
-        model = Organization
-        fields = ["id", "name", "rep_name", "rep_email", "rep_job_title", "teams"]
-        depth = 2
-
-    def create(self, validated_data):
-        teams_data = validated_data.pop("teams")
-        organization = Organization.objects.create(**validated_data)
-        for team_data in teams_data:
-            members_data = team_data.pop("members")
-            team = Team.objects.create(organization=organization, **team_data)
-            for member_data in members_data:
-                ParticipantTeamMember.objects.create(
-                    team=team, organization=organization, **member_data
-                )
-
-        return organization
 
 
 class VoiceEvaluationSerializer(serializers.ModelSerializer):
