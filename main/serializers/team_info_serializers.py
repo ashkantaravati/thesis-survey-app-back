@@ -31,10 +31,18 @@ class OrganizationSerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
+class ParticipatedTeamMemberSerializer(serializers.ModelSerializer):
+    id = HashidSerializerCharField()
+
+    class Meta:
+        model = ParticipantTeamMember
+        fields = ["id", "name", "has_participated"]
+
+
 class TeamSerializer(serializers.ModelSerializer):
     id = HashidSerializerCharField()
 
-    members = NonParticipatedTeamMemberSerializer(
+    members = ParticipatedTeamMemberSerializer(
         many=True,
         read_only=True,
     )
