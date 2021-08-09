@@ -44,6 +44,9 @@ class StatsView(generics.ListAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationRegistrationSerializer
 
+    teams = Team.objects.all()
+    participants = ParticipantTeamMember.objects.all()
+
     def list(self, request):
         """
         This view should return a list of all the organizations for
@@ -51,4 +54,4 @@ class StatsView(generics.ListAPIView):
         """
         queryset = self.get_queryset()
         serializer = OrganizationRegistrationSerializer(queryset, many=True)
-        return Response({'organizations' : len(queryset)})
+        return Response({'organizations' : len(queryset), 'teams' : len(self.teams), 'total_participants': len(self.participants)})
