@@ -1,3 +1,5 @@
+from rest_framework.response import Response
+from main.serializers.team_info_serializers import OrganizationSerializer
 from rest_framework import viewsets, generics
 from .models import Organization, ParticipantTeamMember, Team
 from .serializers import (
@@ -5,6 +7,7 @@ from .serializers import (
     TeamMemberParticipationSerializer,
     TeamSerializer,
 )
+from main import serializers
 
 
 class TeamInfoViewSet(viewsets.ReadOnlyModelViewSet):
@@ -32,3 +35,23 @@ class SurveyParticipationView(generics.RetrieveUpdateAPIView):
 
     queryset = ParticipantTeamMember.objects.all()
     serializer_class = TeamMemberParticipationSerializer
+
+class StatsView(generics.ListAPIView):
+    """
+    A View for listing all organizations
+    """
+
+    queryset = Organization.objects.all()
+    serializer_class = OrganizationRegistrationSerializer
+
+    teams = Team.objects.all()
+    participants = ParticipantTeamMember.objects.all()
+    participated = ParticipantTeamMember.objects.filter(has_participated=True)
+    def list(self, request):
+        """
+        This view should return a list of all the organizations for
+        the user as determined by the username portion of the URL.
+        """
+        queryset = self.get_queryset()
+        serializer = OrganizationRegistrationSerializer(queryset, many=True)
+        return Response({'organizations' : len(queryset), 'teams' : len(self.teams), 'total_participants': len(self.participants), 'participated' : len(self.participated)})
