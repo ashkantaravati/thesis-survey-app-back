@@ -60,32 +60,41 @@ class TeamMemberParticipationSerializer(serializers.ModelSerializer):
         depth = 2
 
     def update(self, instance, validated_data):
-        if instance.has_participated:
-            raise serializers.ValidationError("Already participated")
-        voice_survey_responses = validated_data.get("voice_survey_responses")
-        for voice_survey_response in voice_survey_responses:
-            evaluated_participant_data = voice_survey_response.pop(
-                "evaluated_participant"
+        try:
+            if instance.has_participated:
+                raise serializers.ValidationError("Already participated")
+            voice_survey_responses = validated_data.get("voice_survey_responses")
+            for voice_survey_response in voice_survey_responses:
+                evaluated_participant_data = voice_survey_response.pop(
+                    "evaluated_participant"
+                )
+                evaluated_participant = ParticipantTeamMember.objects.get(
+                    pk=evaluated_participant_data.get("id")
+                )
+                TeamMemberVoiceEvaluationByParticipant.objects.create(
+                    evaluating_participant=instance,
+                    team=instance.team,
+                    evaluated_participant=evaluated_participant,
+                    **voice_survey_response
+                )
+            general_survey_response = validated_data.get("general_survey_response")
+            GeneralSurveyResponse.objects.create(
+                participant=instance, **general_survey_response
             )
-            evaluated_participant = ParticipantTeamMember.objects.get(
-                pk=evaluated_participant_data.get("id")
+            overconfidence_survey_response = validated_data.get(
+                "overconfidence_survey_response"
             )
-            TeamMemberVoiceEvaluationByParticipant.objects.create(
-                evaluating_participant=instance,
-                team=instance.team,
-                evaluated_participant=evaluated_participant,
-                **voice_survey_response
+            OverconfidenceSurveyResponse.objects.create(
+                participant=instance, **overconfidence_survey_response
             )
-        GeneralSurveyResponse.objects.create(
-            participant=instance, **validated_data.get("general_survey_response")
-        )
-        OverconfidenceSurveyResponse.objects.create(
-            participant=instance, **validated_data.get("overconfidence_survey_response")
-        )
-        TeamCoordinationSurveyResponse.objects.create(
-            participant=instance,
-            **validated_data.get("team_coordination_survey_response")
-        )
-        instance.has_participated = True
-        instance.save()
+            team_coordination_survey_response = validated_data.get(
+                "team_coordination_survey_response"
+            )
+            TeamCoordinationSurveyResponse.objects.create(
+                participant=instance, **team_coordination_survey_response
+            )
+            instance.has_participated = True
+            instance.save(force_update=True)
+        except Exception as e:
+            raise serializers.ValidationError(e)
         return instance
