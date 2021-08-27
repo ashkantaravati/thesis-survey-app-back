@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "/home/ashkan/.local/share/virtualenvs/thesis-survey-app-back-_8UYCB1v/bin/python"
+    "python.pythonPath": "/home/ashkan/.local/share/virtualenvs/thesis-survey-app-back-_8UYCB1v/bin/python",
+    "python.linting.pylamaEnabled": true,
+    "python.linting.enabled": true
 }
