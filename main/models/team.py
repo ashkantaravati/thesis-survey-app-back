@@ -12,7 +12,7 @@ class Team(models.Model):
     )
 
     @display(
-        description="Number of Teams",
+        description="Number of Members",
     )
     def number_of_members(self):
         return self.members.count()
