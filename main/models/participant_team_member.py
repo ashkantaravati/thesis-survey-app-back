@@ -15,7 +15,7 @@ class ParticipantTeamMember(models.Model):
     organization = models.ForeignKey(to=Organization, on_delete=models.DO_NOTHING)
 
     def __str__(self) -> str:
-        return f"{self.name} از تیم {self.team}"
+        return f"{self.name}"
 
     @property
     @display(
