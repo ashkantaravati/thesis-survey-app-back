@@ -1,7 +1,7 @@
 from django.db import models
 from .participant_team_member import ParticipantTeamMember
 from .team import Team
-from django.contrib import admin
+from django.contrib.admin import display
 
 
 class TeamMemberVoiceEvaluationByParticipant(models.Model):
@@ -24,7 +24,7 @@ class TeamMemberVoiceEvaluationByParticipant(models.Model):
     team = models.ForeignKey(to=Team, on_delete=models.DO_NOTHING)
 
     @property
-    @admin.display(
+    @display(
         description="Voice Behavior Score",
     )
     def score(self):
