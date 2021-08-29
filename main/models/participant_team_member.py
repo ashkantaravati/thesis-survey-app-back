@@ -56,3 +56,10 @@ class ParticipantTeamMember(models.Model):
     )
     def sex(self):
         return self.general_survey_response.sex
+
+    @property
+    @display(
+        description="Opinion on Team Coordination Score",
+    )
+    def opinion_on_team_coordination_score(self):
+        return self.team_coordination_survey_response.score

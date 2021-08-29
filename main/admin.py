@@ -41,6 +41,7 @@ class TeamAdmin(admin.ModelAdmin):
         "average_member_tenure",
         "average_member_team_history",
         "average_voice_behavior",
+        "average_team_coordination",
     )
 
     inlines = [

@@ -13,3 +13,13 @@ class TeamCoordinationSurveyResponse(models.Model):
         on_delete=models.CASCADE,
         related_name="team_coordination_survey_response",
     )
+
+    @property
+    def score(self):
+        return (
+            self.question_1
+            + self.question_2
+            + self.question_3
+            + self.question_4
+            + self.question_5
+        ) / 5

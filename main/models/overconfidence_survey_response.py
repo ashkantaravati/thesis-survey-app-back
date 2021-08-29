@@ -28,3 +28,7 @@ class OverconfidenceSurveyResponse(models.Model):
         on_delete=models.CASCADE,
         related_name="overconfidence_survey_response",
     )
+
+    @property
+    def score(self):
+        pass
