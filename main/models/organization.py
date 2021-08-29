@@ -1,5 +1,6 @@
 from django.db import models
 from hashid_field.field import HashidAutoField
+from django.contrib.admin import display
 
 
 class Organization(models.Model):
@@ -8,6 +9,13 @@ class Organization(models.Model):
     rep_name = models.CharField(max_length=50)
     rep_email = models.EmailField(null=True, blank=True)
     rep_job_title = models.CharField(max_length=50)
+
+    @property
+    @display(
+        description="Number of Teams",
+    )
+    def number_of_teams(self):
+        return self.teams.count()
 
     def __str__(self) -> str:
         return f"{self.name} "
