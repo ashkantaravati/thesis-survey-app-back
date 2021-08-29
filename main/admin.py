@@ -17,6 +17,7 @@ class TeamInline(admin.StackedInline):
 
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "rep_name", "number_of_teams")
 
     inlines = [
         TeamInline,
@@ -30,6 +31,7 @@ class TeamMemberInline(admin.StackedInline):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "organization", "number_of_members")
 
     inlines = [
         TeamMemberInline,
@@ -76,6 +78,13 @@ class VoiceEvaluationsByParticipantInline(admin.StackedInline):
 
 @admin.register(ParticipantTeamMember)
 class ParticipantTeamMemberAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "team",
+        "organization",
+        "average_voice_behavior_score",
+    )
 
     readonly_fields = ["average_voice_behavior_score"]
 
