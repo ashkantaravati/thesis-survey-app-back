@@ -11,18 +11,42 @@ class Team(models.Model):
         to=Organization, related_name="teams", on_delete=models.DO_NOTHING
     )
 
+    @property
     @display(
         description="Number of Members",
     )
     def number_of_members(self):
         return self.members.count()
 
+    @property
     @display(
         description="Number of Participated Members",
     )
     def number_of_participated_members(self):
         return self.members.filter(has_participated=True).count()
 
+    @property
+    @display(description="Average Team Member Age")
+    def average_member_age(self):
+        participated_members = self.members.filter(has_participated=True)
+        ages = [member.age for member in participated_members]
+        return sum(ages) / len(ages) if ages else 0
+
+    @property
+    @display(description="Average Team Member Tenure")
+    def average_member_tenure(self):
+        participated_members = self.members.filter(has_participated=True)
+        tenures = [member.tenure for member in participated_members]
+        return sum(tenures) / len(tenures) if tenures else 0
+
+    @property
+    @display(description="Average Team Member Team History")
+    def average_member_team_history(self):
+        participated_members = self.members.filter(has_participated=True)
+        team_histories = [member.team_history for member in participated_members]
+        return sum(team_histories) / len(team_histories) if team_histories else 0
+
+    @property
     @display(
         description="Average Team Member Voice Behavior",
     )

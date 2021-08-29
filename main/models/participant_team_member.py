@@ -28,3 +28,31 @@ class ParticipantTeamMember(models.Model):
                 evaluation.score for evaluation in evaluations if evaluation.score
             ]
             return sum(submitted_scores) / len(submitted_scores)
+
+    @property
+    @display(
+        description="age",
+    )
+    def age(self) -> int:
+        return self.general_survey_response.age
+
+    @property
+    @display(
+        description="tenure",
+    )
+    def tenure(self) -> int:
+        return self.general_survey_response.tenure
+
+    @property
+    @display(
+        description="team_history",
+    )
+    def team_history(self) -> int:
+        return self.general_survey_response.team_history
+
+    @property
+    @display(
+        description="sex",
+    )
+    def sex(self):
+        return self.general_survey_response.sex

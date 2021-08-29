@@ -31,7 +31,17 @@ class TeamMemberInline(admin.StackedInline):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "organization", "number_of_members")
+    list_display = (
+        "id",
+        "name",
+        "organization",
+        "number_of_members",
+        "number_of_participated_members",
+        "average_member_age",
+        "average_member_tenure",
+        "average_member_team_history",
+        "average_voice_behavior",
+    )
 
     inlines = [
         TeamMemberInline,
