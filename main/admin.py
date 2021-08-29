@@ -55,6 +55,7 @@ class VoiceEvaluationsAboutParticipantInline(admin.StackedInline):
     can_delete = False
     fk_name = "evaluated_participant"
     exclude = ("team",)
+    readonly_fields = ("score",)
     verbose_name = "Voice behavior evaluation by teammate about this participant"
     verbose_name_plural = (
         "Voice behavior evaluations by teammates about this participant"
@@ -66,6 +67,7 @@ class VoiceEvaluationsByParticipantInline(admin.StackedInline):
     can_delete = False
     fk_name = "evaluating_participant"
     exclude = ("team",)
+    readonly_fields = ("score",)
     verbose_name = "Voice behavior evaluation by this participant about teammate"
     verbose_name_plural = (
         "Voice behavior evaluations by this participant about teammates"
