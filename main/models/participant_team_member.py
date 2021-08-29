@@ -2,6 +2,7 @@ from django.db import models
 from hashid_field.field import HashidAutoField
 from .organization import Organization
 from .team import Team
+from django.contrib.admin import display
 
 
 class ParticipantTeamMember(models.Model):
@@ -15,3 +16,13 @@ class ParticipantTeamMember(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} از تیم {self.team}"
+
+    @property
+    @display(
+        description="Average Voice Behavior Score by Teammate evaluations",
+    )
+    def average_voice_behavior_score(self) -> float:
+        evaluations = self.voice_evaluations_about_participant.all()
+        if evaluations:
+            scores = [evaluation.score for evaluation in evaluations]
+            return sum(scores) / len(scores)
