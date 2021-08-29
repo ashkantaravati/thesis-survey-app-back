@@ -24,5 +24,7 @@ class ParticipantTeamMember(models.Model):
     def average_voice_behavior_score(self) -> float:
         evaluations = self.voice_evaluations_about_participant.all()
         if evaluations:
-            scores = [evaluation.score for evaluation in evaluations]
-            return sum(scores) / len(scores)
+            submitted_scores = [
+                evaluation.score for evaluation in evaluations if evaluation.score
+            ]
+            return sum(submitted_scores) / len(submitted_scores)
