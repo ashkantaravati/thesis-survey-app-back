@@ -17,5 +17,22 @@ class Team(models.Model):
     def number_of_members(self):
         return self.members.count()
 
+    @display(
+        description="Average Team Member Voice Behavior",
+    )
+    def average_voice_behavior(self):
+        members = self.members.all()
+        if members:
+            scores_for_member_with_scores = [
+                member.average_voice_behavior_score
+                for member in members
+                if member.average_voice_behavior_score
+            ]
+            if len(scores_for_member_with_scores) > 0:
+                return sum(scores_for_member_with_scores) / len(
+                    scores_for_member_with_scores
+                )
+        return "N/A"
+
     def __str__(self) -> str:
         return f"{self.name} مربوط به {self.organization}"
