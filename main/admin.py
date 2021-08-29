@@ -77,6 +77,8 @@ class VoiceEvaluationsByParticipantInline(admin.StackedInline):
 @admin.register(ParticipantTeamMember)
 class ParticipantTeamMemberAdmin(admin.ModelAdmin):
 
+    readonly_fields = ["average_voice_behavior_score"]
+
     inlines = [
         GeneralSurveyResponseInline,
         OverconfidenceSurveyResponseInline,
