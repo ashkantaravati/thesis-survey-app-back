@@ -18,6 +18,12 @@ class Team(models.Model):
         return self.members.count()
 
     @display(
+        description="Number of Participated Members",
+    )
+    def number_of_participated_members(self):
+        return self.members.filter(has_participated=True).count()
+
+    @display(
         description="Average Team Member Voice Behavior",
     )
     def average_voice_behavior(self):
