@@ -74,7 +74,7 @@ class TeamCoordinationSurveyResponseInline(admin.StackedInline):
     can_delete = False
 
 
-class VoiceEvaluationsAboutParticipantInline(admin.StackedInline):
+class VoiceEvaluationsAboutParticipantInline(admin.TabularInline):
     model = TeamMemberVoiceEvaluationByParticipant
     can_delete = False
     fk_name = "evaluated_participant"
@@ -86,7 +86,7 @@ class VoiceEvaluationsAboutParticipantInline(admin.StackedInline):
     )
 
 
-class VoiceEvaluationsByParticipantInline(admin.StackedInline):
+class VoiceEvaluationsByParticipantInline(admin.TabularInline):
     model = TeamMemberVoiceEvaluationByParticipant
     can_delete = False
     fk_name = "evaluating_participant"
