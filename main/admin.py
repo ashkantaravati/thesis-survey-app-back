@@ -26,6 +26,7 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 class TeamMemberInline(admin.StackedInline):
     model = ParticipantTeamMember
+    exclude = ["organization"]
     can_delete = False
 
 
