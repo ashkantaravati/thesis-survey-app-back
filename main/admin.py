@@ -45,6 +45,16 @@ class TeamAdmin(admin.ModelAdmin):
         "average_team_coordination",
     )
 
+    readonly_fields = (
+        "number_of_members",
+        "number_of_participated_members",
+        "average_member_age",
+        "average_member_tenure",
+        "average_member_team_history",
+        "average_voice_behavior",
+        "average_team_coordination",
+    )
+
     inlines = [
         TeamMemberInline,
     ]
