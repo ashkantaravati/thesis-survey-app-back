@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .actions import export_as_json, export_as_csv
 from .models import (
     Organization,
     Team,
@@ -117,3 +118,7 @@ class ParticipantTeamMemberAdmin(admin.ModelAdmin):
         VoiceEvaluationsAboutParticipantInline,
         VoiceEvaluationsByParticipantInline,
     ]
+
+
+admin.site.add_action(export_as_json, "export_as_json")
+admin.site.add_action(export_as_csv, "export_as_csv")

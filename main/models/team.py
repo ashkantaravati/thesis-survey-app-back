@@ -82,3 +82,16 @@ class Team(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} مربوط به {self.organization}"
+
+    @property
+    def as_dict(self) -> dict:
+        return {
+            "team": self.id,
+            "org": self.organization.id,
+            "team_size": self.number_of_participated_members,
+            "average_member_age": self.average_member_age,
+            "average_member_tenure": self.average_member_tenure,
+            "average_member_team_history": self.average_member_team_history,
+            "average_voice_behavior": self.average_voice_behavior,
+            "average_team_coordination": self.average_team_coordination,
+        }
