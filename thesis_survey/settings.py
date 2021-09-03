@@ -7,7 +7,7 @@ DEBUG = True
 
 HASHID_FIELD_SALT = "a1+l-o$qehsv9iugyzpeit7xivomcc6#k#q9%)#7#8ftkg#i@!"
 
-ALLOWED_HOSTS = ["thesis.ashkantaravati.ir", "localhost"]
+ALLOWED_HOSTS = ["thesis.ashkantaravati.ir", "localhost", "127.0.0.1"]
 INSTALLED_APPS = [
     "main",
     "django.contrib.admin",
@@ -102,6 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
 
 LANGUAGE_CODE = "en-us"  # "fa-ir"
 
