@@ -1,4 +1,5 @@
 from pathlib import Path
+from os import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -103,6 +104,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_BACKEND = (
+    "django.core.mail.backends.filebased.EmailBackend"
+    if DEBUG
+    else "django.core.mail.backends.smtp.EmailBackend"
+)
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = environ.get("EMAIL_USER")
+EMAIL_HOST_PASSWORD = environ.get("EMAIL_PASS")
+
+EMAIL_FILE_PATH = "mail_dir"  # change this to a proper location
+DEFAULT_FROM_EMAIL = "ashkan.taravati@gmail.com"
 
 LANGUAGE_CODE = "en-us"  # "fa-ir"
 
