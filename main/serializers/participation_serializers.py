@@ -71,26 +71,38 @@ class TeamMemberParticipationSerializer(serializers.ModelSerializer):
                 evaluated_participant = ParticipantTeamMember.objects.get(
                     pk=evaluated_participant_data.get("id")
                 )
-                TeamMemberVoiceEvaluationByParticipant.objects.create(
+                (
+                    _,
+                    created_voice_evaluation,
+                ) = TeamMemberVoiceEvaluationByParticipant.objects.get_or_create(
                     evaluating_participant=instance,
                     team=instance.team,
                     evaluated_participant=evaluated_participant,
                     **voice_survey_response
                 )
             general_survey_response = validated_data.get("general_survey_response")
-            GeneralSurveyResponse.objects.create(
+            (
+                _,
+                created_general_survey_response,
+            ) = GeneralSurveyResponse.objects.get_or_create(
                 participant=instance, **general_survey_response
             )
             overconfidence_survey_response = validated_data.get(
                 "overconfidence_survey_response"
             )
-            OverconfidenceSurveyResponse.objects.create(
+            (
+                _,
+                created_overconfidence_response,
+            ) = OverconfidenceSurveyResponse.objects.get_or_create(
                 participant=instance, **overconfidence_survey_response
             )
             team_coordination_survey_response = validated_data.get(
                 "team_coordination_survey_response"
             )
-            TeamCoordinationSurveyResponse.objects.create(
+            (
+                _,
+                created_team_coordination_response,
+            ) = TeamCoordinationSurveyResponse.objects.get_or_create(
                 participant=instance, **team_coordination_survey_response
             )
             instance.has_participated = True
