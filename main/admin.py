@@ -122,3 +122,4 @@ class ParticipantTeamMemberAdmin(admin.ModelAdmin):
 
 admin.site.add_action(export_as_json, "export_as_json")
 admin.site.add_action(export_as_csv, "export_as_csv")
+admin.site.register(TeamMemberVoiceEvaluationByParticipant)
