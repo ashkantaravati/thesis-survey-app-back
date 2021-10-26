@@ -12,6 +12,8 @@ django = "*"
 djangorestframework = "*"
 django-hashid-field = "*"
 django-cors-headers = "*"
+pingouin = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.7"
