@@ -1,7 +1,11 @@
 from django.db import models
 from hashid_field.field import HashidAutoField
 from .organization import Organization
+from .team_member_voice_evaluation_by_participant import (
+    TeamMemberVoiceEvaluationByParticipant,
+)
 from django.contrib.admin import display
+from pandas import DataFrame
 
 
 class Team(models.Model):
@@ -10,6 +14,20 @@ class Team(models.Model):
     organization = models.ForeignKey(
         to=Organization, related_name="teams", on_delete=models.DO_NOTHING
     )
+
+    def get_voice_score_matrix(self) -> DataFrame:
+        # get scores for each participant
+        matrix = []
+        for ratee in self.members:
+            row = []
+            for rater in self.members:
+                score = TeamMemberVoiceEvaluationByParticipant.objects.filter(
+                    evaluated_participant=ratee, evaluating_participant=rater
+                )
+                row.append(score)
+            matrix.append(row)
+
+        return DataFrame(data=matrix)  # add axes
 
     @property
     def queried_members(self) -> list:
@@ -56,6 +74,7 @@ class Team(models.Model):
     )
     def average_voice_behavior(self):
         # members = self.members.all()
+
         if self.queried_members:
             scores_for_member_with_scores = [
                 member.average_voice_behavior_score
