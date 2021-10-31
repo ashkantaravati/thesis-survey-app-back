@@ -48,19 +48,19 @@ class Team(models.Model):
     @display(description="Average Age")
     def average_member_age(self):
         ages = [member.age for member in self.queried_members]
-        return sum(ages) / len(ages) if ages else 0
+        return get_mean_value_of_list(ages)
 
     @property
     @display(description="Average Tenure")
     def average_member_tenure(self):
         tenures = [member.tenure for member in self.queried_members]
-        return sum(tenures) / len(tenures) if tenures else 0
+        return get_mean_value_of_list(tenures)
 
     @property
     @display(description="Average Team History")
     def average_member_team_history(self):
         team_histories = [member.team_history for member in self.queried_members]
-        return sum(team_histories) / len(team_histories) if team_histories else 0
+        return get_mean_value_of_list(team_histories)
 
     @property
     @display(
@@ -88,7 +88,7 @@ class Team(models.Model):
             for member in self.queried_members
             if member.opinion_on_team_coordination_score
         ]
-        return sum(scores) / len(scores) if scores else 0
+        return get_mean_value_of_list(scores)
 
     def __str__(self) -> str:
         return f"{self.name} مربوط به {self.organization}"
