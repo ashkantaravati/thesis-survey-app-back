@@ -1,15 +1,17 @@
 import pingouin as pg
 import pandas as pd
 
+from main.typing import ListOfICCFrameRecord
+
 ICC_RELIABILITY_THRESHOLD = 0.5
 DECIMAL_PLACES = 2
 
 
-def create_data_frame_for_icc(records: "list[tuple[str,str,float]]") -> pd.DataFrame:
+def create_data_frame_for_icc(records: ListOfICCFrameRecord) -> pd.DataFrame:
     if records:
-        df = pd.DataFrame(
-            records, columns=["Rater", "Ratee", "Score"], dtype=float
-        ).round(DECIMAL_PLACES)
+        df = pd.DataFrame(records, columns=["Rater", "Ratee", "Score"]).round(
+            DECIMAL_PLACES
+        )
         return df
     return pd.DataFrame()
 

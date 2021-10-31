@@ -1,4 +1,6 @@
 from django.db import models
+
+from main.typing import ICCFrameRecord
 from .participant_team_member import ParticipantTeamMember
 from .team import Team
 from django.contrib.admin import display
@@ -23,7 +25,7 @@ class TeamMemberVoiceEvaluationByParticipant(models.Model):
     )
     team = models.ForeignKey(to=Team, on_delete=models.DO_NOTHING)
 
-    def as_record(self) -> tuple:
+    def as_record(self) -> ICCFrameRecord:
         rater_id = self.evaluating_participant.id
         ratee_id = self.evaluated_participant.id
         score = self.score

@@ -1,5 +1,7 @@
 from django.db import models
 from hashid_field.field import HashidAutoField
+
+from main.typing import ListOfICCFrameRecord
 from .organization import Organization
 from django.contrib.admin import display
 from main.calculations import (
@@ -16,7 +18,7 @@ class Team(models.Model):
         to=Organization, related_name="teams", on_delete=models.DO_NOTHING
     )
 
-    def voice_ratings_as_records(self):
+    def voice_ratings_as_records(self) -> ListOfICCFrameRecord:
         records = []
         for member in self.members.all():
             records += member.voice_ratings_as_records()
