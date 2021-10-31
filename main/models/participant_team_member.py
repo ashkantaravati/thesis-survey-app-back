@@ -17,6 +17,11 @@ class ParticipantTeamMember(models.Model):
     def __str__(self) -> str:
         return f"{self.name}"
 
+    def voice_ratings_as_records(self) -> list:
+        all_evaluations = self.voice_evaluations_about_participant.all()
+        list_of_records = [evaluation.as_record() for evaluation in all_evaluations]
+        return list_of_records
+
     @property
     @display(
         description="Average Voice Behavior Score by Teammate evaluations",
