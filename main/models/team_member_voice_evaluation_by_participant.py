@@ -23,6 +23,12 @@ class TeamMemberVoiceEvaluationByParticipant(models.Model):
     )
     team = models.ForeignKey(to=Team, on_delete=models.DO_NOTHING)
 
+    def as_record(self) -> tuple:
+        rater_id = self.evaluating_participant.id
+        ratee_id = self.evaluated_participant.id
+        score = self.score
+        return (rater_id.hashid, ratee_id.hashid, score)
+
     @property
     @display(
         description="Voice Behavior Score",
