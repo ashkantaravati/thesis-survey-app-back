@@ -32,42 +32,39 @@ class Team(models.Model):
 
     @property
     @display(
-        description="Number of Members",
+        description="Size",
     )
     def number_of_members(self):
         return self.members.count()
 
     @property
     @display(
-        description="Number of Participated Members",
+        description="No. of Participated",
     )
     def number_of_participated_members(self):
         return self.queried_members.count()
 
     @property
-    @display(description="Average Team Member Age")
+    @display(description="Average Age")
     def average_member_age(self):
-        # participated_members = self.members.filter(has_participated=True)
         ages = [member.age for member in self.queried_members]
         return sum(ages) / len(ages) if ages else 0
 
     @property
-    @display(description="Average Team Member Tenure")
+    @display(description="Average Tenure")
     def average_member_tenure(self):
-        # participated_members = self.members.filter(has_participated=True)
         tenures = [member.tenure for member in self.queried_members]
         return sum(tenures) / len(tenures) if tenures else 0
 
     @property
-    @display(description="Average Team Member Team History")
+    @display(description="Average Team History")
     def average_member_team_history(self):
-        # participated_members = self.members.filter(has_participated=True)
         team_histories = [member.team_history for member in self.queried_members]
         return sum(team_histories) / len(team_histories) if team_histories else 0
 
     @property
     @display(
-        description="Average Team Member Voice Behavior",
+        description="Voice Behavior",
     )
     def average_voice_behavior(self):
         if self.queried_members and self.voice_ratings_are_reliable():
@@ -83,7 +80,7 @@ class Team(models.Model):
 
     @property
     @display(
-        description="Average Opinion on Team Coordination",
+        description="Team Coordination",
     )
     def average_team_coordination(self):
         scores = [
