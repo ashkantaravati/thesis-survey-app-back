@@ -1,11 +1,11 @@
 from django.db import models
 from hashid_field.field import HashidAutoField
 from .organization import Organization
-from .team_member_voice_evaluation_by_participant import (
-    TeamMemberVoiceEvaluationByParticipant,
-)
 from django.contrib.admin import display
-from pandas import DataFrame
+from main.calculations import (
+    create_data_frame_for_icc,
+    check_interrater_reliability_with_icc,
+)
 
 
 class Team(models.Model):
@@ -15,19 +15,15 @@ class Team(models.Model):
         to=Organization, related_name="teams", on_delete=models.DO_NOTHING
     )
 
-    def get_voice_score_matrix(self) -> DataFrame:
-        # get scores for each participant
-        matrix = []
-        for ratee in self.members:
-            row = []
-            for rater in self.members:
-                score = TeamMemberVoiceEvaluationByParticipant.objects.filter(
-                    evaluated_participant=ratee, evaluating_participant=rater
-                )
-                row.append(score)
-            matrix.append(row)
+    def voice_ratings_as_records(self):
+        records = []
+        for member in self.members.all():
+            records += member.voice_ratings_as_records()
+        return records
 
-        return DataFrame(data=matrix)  # add axes
+    def voice_ratings_are_reliable(self):
+        df = create_data_frame_for_icc(self.voice_ratings_as_records())
+        return check_interrater_reliability_with_icc(df)
 
     @property
     def queried_members(self) -> list:
@@ -74,17 +70,18 @@ class Team(models.Model):
     )
     def average_voice_behavior(self):
         # members = self.members.all()
-
-        if self.queried_members:
+        if self.queried_members and self.voice_ratings_are_reliable():
             scores_for_member_with_scores = [
                 member.average_voice_behavior_score
                 for member in self.queried_members
                 if member.average_voice_behavior_score
             ]
             if len(scores_for_member_with_scores) > 0:
-                return sum(scores_for_member_with_scores) / len(
+                average = sum(scores_for_member_with_scores) / len(
                     scores_for_member_with_scores
                 )
+                return round(average, 2)
+
         return "N/A"
 
     @property
