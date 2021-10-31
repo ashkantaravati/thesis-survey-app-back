@@ -24,8 +24,18 @@ class Team(models.Model):
             records += member.voice_ratings_as_records()
         return records
 
+    def coordination_ratings_as_records(self) -> ListOfICCFrameRecord:
+        records = []
+        for member in self.members.all():
+            records.append(member.coordination_ratings_as_record())
+        return records
+
     def voice_ratings_are_reliable(self):
         df = create_data_frame_for_icc(self.voice_ratings_as_records())
+        return check_interrater_reliability_with_icc(df)
+
+    def coordination_ratings_are_reliable(self):
+        df = create_data_frame_for_icc(self.coordination_ratings_as_records())
         return check_interrater_reliability_with_icc(df)
 
     @property
@@ -85,12 +95,15 @@ class Team(models.Model):
         description="Team Coordination",
     )
     def average_team_coordination(self):
-        scores = [
-            member.opinion_on_team_coordination_score
-            for member in self.queried_members
-            if member.opinion_on_team_coordination_score
-        ]
-        return get_mean_value_of_list(scores)
+        if self.queried_members and self.coordination_ratings_are_reliable():
+            scores = [
+                member.opinion_on_team_coordination_score
+                for member in self.queried_members
+                if member.opinion_on_team_coordination_score
+            ]
+            return get_mean_value_of_list(scores)
+
+        return "N/A"
 
     def __str__(self) -> str:
         return f"{self.name} مربوط به {self.organization}"

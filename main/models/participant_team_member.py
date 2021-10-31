@@ -1,7 +1,7 @@
 from django.db import models
 from hashid_field.field import HashidAutoField
 
-from main.typing import ListOfICCFrameRecord
+from main.typing import ICCFrameRecord, ListOfICCFrameRecord
 from .organization import Organization
 from .team import Team
 from django.contrib.admin import display
@@ -23,6 +23,10 @@ class ParticipantTeamMember(models.Model):
         all_evaluations = self.voice_evaluations_about_participant.all()
         list_of_records = [evaluation.as_record() for evaluation in all_evaluations]
         return list_of_records
+
+    def coordination_ratings_as_record(self) -> ICCFrameRecord:
+        record = self.team_coordination_survey_response.as_record()
+        return record
 
     @property
     @display(
