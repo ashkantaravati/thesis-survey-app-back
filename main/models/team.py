@@ -5,6 +5,7 @@ from django.contrib.admin import display
 from main.calculations import (
     create_data_frame_for_icc,
     check_interrater_reliability_with_icc,
+    get_mean_value_of_list,
 )
 
 
@@ -69,19 +70,15 @@ class Team(models.Model):
         description="Average Team Member Voice Behavior",
     )
     def average_voice_behavior(self):
-        # members = self.members.all()
         if self.queried_members and self.voice_ratings_are_reliable():
             scores_for_member_with_scores = [
                 member.average_voice_behavior_score
                 for member in self.queried_members
                 if member.average_voice_behavior_score
             ]
-            if len(scores_for_member_with_scores) > 0:
-                average = sum(scores_for_member_with_scores) / len(
-                    scores_for_member_with_scores
-                )
-                return round(average, 2)
-
+            mean = get_mean_value_of_list(scores_for_member_with_scores)
+            if mean:
+                return mean
         return "N/A"
 
     @property

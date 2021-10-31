@@ -23,3 +23,9 @@ def check_interrater_reliability_with_icc(df: pd.DataFrame) -> "tuple[bool, floa
         is_valid = True if icc3_value > ICC_RELIABILITY_THRESHOLD else False
         return is_valid, icc3_value
     return False, 0.0
+
+
+def get_mean_value_of_list(values: "list[float]") -> float:
+    if values:
+        return round(sum(values) / len(values), DECIMAL_PLACES)
+    return 0.0
