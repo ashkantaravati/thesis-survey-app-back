@@ -1,4 +1,6 @@
 from django.db import models
+
+from main.typing import ICCFrameRecord
 from .participant_team_member import ParticipantTeamMember
 
 
@@ -13,6 +15,9 @@ class TeamCoordinationSurveyResponse(models.Model):
         on_delete=models.CASCADE,
         related_name="team_coordination_survey_response",
     )
+
+    def as_record(self) -> ICCFrameRecord:
+        return (self.participant.id.hashid, self.participant.team.id.hashid, self.score)
 
     @property
     def score(self):
