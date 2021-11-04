@@ -1,13 +1,14 @@
 from rest_framework.response import Response
-from main.serializers.team_info_serializers import OrganizationSerializer
 from rest_framework import viewsets, generics
+from rest_framework.views import APIView
+
+from main.models import team
 from .models import Organization, ParticipantTeamMember, Team
 from .serializers import (
     OrganizationRegistrationSerializer,
     TeamMemberParticipationSerializer,
     TeamSerializer,
 )
-from main import serializers
 
 
 class TeamInfoViewSet(viewsets.ReadOnlyModelViewSet):
@@ -36,22 +37,43 @@ class SurveyParticipationView(generics.RetrieveUpdateAPIView):
     queryset = ParticipantTeamMember.objects.all()
     serializer_class = TeamMemberParticipationSerializer
 
-class StatsView(generics.ListAPIView):
+
+class StatsView(APIView):
     """
-    A View for listing all organizations
+    A View to get stats
     """
 
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationRegistrationSerializer
+    def get(self, request, format=None):
+        """
+        Returns stats object
+        """
+        TARGET = 70
+        orgs = Organization.objects.all()
+        teams = Team.objects.all()
+        participants = ParticipantTeamMember.objects.all()
 
-    teams = Team.objects.all()
-    participants = ParticipantTeamMember.objects.all()
-    participated = ParticipantTeamMember.objects.filter(has_participated=True)
-    def list(self, request):
-        """
-        This view should return a list of all the organizations for
-        the user as determined by the username portion of the URL.
-        """
-        queryset = self.get_queryset()
-        serializer = OrganizationRegistrationSerializer(queryset, many=True)
-        return Response({'organizations' : len(queryset), 'teams' : len(self.teams), 'total_participants': len(self.participants), 'participated' : len(self.participated)})
+        participated_teams = [team for team in teams if team.has_participated]
+        participated_participants = [
+            participant for participant in participants if participant.has_participated
+        ]
+        participated_orgs = [org for org in orgs if org.has_participated]
+        stats = {
+            "overall": {
+                "target_team_size": TARGET,
+                "number_of_registered_teams": len(teams),
+                "number_of_participated_teams": len(participated_teams),
+                "number_of_registered_participants": len(participants),
+                "number_of_participated_participants": len(participated_participants),
+                "number_of_registered_organizations": len(orgs),
+                "number_of_participated_organizations": len(participated_orgs),
+            },
+            "registered_organizations": [
+                {
+                    "id": org.id.hashid,
+                    "name": org.name,
+                    "number_of_teams": len(org.teams.all()),
+                }
+                for org in orgs
+            ],
+        }
+        return Response(stats)
