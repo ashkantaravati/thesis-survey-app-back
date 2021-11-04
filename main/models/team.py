@@ -18,6 +18,10 @@ class Team(models.Model):
         to=Organization, related_name="teams", on_delete=models.DO_NOTHING
     )
 
+    @property
+    def has_participated(self) -> bool:
+        return self.number_of_participated_members > 0
+
     def voice_ratings_as_records(self) -> ListOfICCFrameRecord:
         records = []
         for member in self.members.all():
