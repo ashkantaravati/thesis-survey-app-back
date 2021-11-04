@@ -1,5 +1,10 @@
 from rest_framework import routers
-from main.views import CreateOrganizationView, SurveyParticipationView, TeamInfoViewSet, StatsView
+from main.views import (
+    CreateOrganizationView,
+    SurveyParticipationView,
+    TeamInfoViewSet,
+    StatsView,
+)
 
 router = routers.SimpleRouter()
 router.register(
@@ -14,7 +19,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/organizations/", CreateOrganizationView.as_view()),
     path("api/responses/<str:pk>", SurveyParticipationView.as_view()),
-    path("stats/", StatsView.as_view()),
+    path("api/stats/", StatsView.as_view()),
     path("api/", include(router.urls)),
 ]
 
