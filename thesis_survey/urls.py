@@ -3,8 +3,8 @@ from main.views import (
     CreateOrganizationView,
     SurveyParticipationView,
     TeamInfoViewSet,
-    StatsView,
 )
+from main.stats import StatsView
 
 router = routers.SimpleRouter()
 router.register(
