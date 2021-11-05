@@ -17,5 +17,16 @@ class Organization(models.Model):
     def number_of_teams(self):
         return self.teams.count()
 
+    @property
+    def number_of_participated_teams(self):
+        participated_teams = [
+            team for team in self.teams.all() if team.has_participated
+        ]
+        return len(participated_teams)
+
+    @property
+    def has_participated(self):
+        return self.number_of_participated_teams > 0
+
     def __str__(self) -> str:
         return f"{self.name} "
