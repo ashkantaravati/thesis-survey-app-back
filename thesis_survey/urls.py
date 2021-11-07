@@ -4,7 +4,8 @@ from main.views import (
     SurveyParticipationView,
     TeamInfoViewSet,
 )
-from main.stats import StatsView
+from main.stats import StatsView, DashboardView
+
 
 router = routers.SimpleRouter()
 router.register(
@@ -20,6 +21,7 @@ urlpatterns = [
     path("api/organizations/", CreateOrganizationView.as_view()),
     path("api/responses/<str:pk>", SurveyParticipationView.as_view()),
     path("api/stats/", StatsView.as_view()),
+    path("api/stats/dashboard", DashboardView.as_view()),
     path("api/", include(router.urls)),
 ]
 
