@@ -17,6 +17,8 @@ class Team(models.Model):
     organization = models.ForeignKey(
         to=Organization, related_name="teams", on_delete=models.DO_NOTHING
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     @property
     def has_participated(self) -> bool:

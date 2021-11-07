@@ -15,6 +15,8 @@ class ParticipantTeamMember(models.Model):
         to=Team, related_name="members", on_delete=models.DO_NOTHING
     )
     organization = models.ForeignKey(to=Organization, on_delete=models.DO_NOTHING)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"{self.name}"

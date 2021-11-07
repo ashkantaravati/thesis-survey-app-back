@@ -9,6 +9,8 @@ class Organization(models.Model):
     rep_name = models.CharField(max_length=50)
     rep_email = models.EmailField(null=True, blank=True)
     rep_job_title = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     @property
     @display(
