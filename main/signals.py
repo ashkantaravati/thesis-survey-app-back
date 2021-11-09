@@ -12,7 +12,12 @@ def send_email_upon_org_reg(sender, instance, created, **kwargs):
         subject = "به پرسشنامه بررسی اثربخشی تیم‌های توسعه نرم‌افزار خوش آمدید."
         to = instance.rep_email
         html_message = render_to_string(
-            "main/org_reg_success.html", {"organization": instance}
+            "main/org_reg_success.html",
+            {
+                "org": instance.name,
+                "rep_name": instance.rep_name,
+                "token": instance.id.hashid,
+            },
         )
         plain_message = strip_tags(html_message)
         send_mail(
