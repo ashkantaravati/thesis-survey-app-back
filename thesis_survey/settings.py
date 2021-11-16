@@ -1,12 +1,17 @@
 from pathlib import Path
-from os import environ
+
+import environ
+
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-md)ah!ly36(60t^y+td&&2iqog7#g*5heuj+x56_#b@_sacsx2"
-DEBUG = True
+SECRET_KEY = env("SECRET_KEY")
+DEBUG = env("DEBUG")
 
-HASHID_FIELD_SALT = "a1+l-o$qehsv9iugyzpeit7xivomcc6#k#q9%)#7#8ftkg#i@!"
+HASHID_FIELD_SALT = env("HASHID_FIELD_SALT")
 
 ALLOWED_HOSTS = ["thesis.ashkantaravati.ir", "localhost", "127.0.0.1"]
 INSTALLED_APPS = [
@@ -113,11 +118,11 @@ EMAIL_BACKEND = (
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = environ.get("EMAIL_USER")
-EMAIL_HOST_PASSWORD = environ.get("EMAIL_PASS")
-
+EMAIL_HOST_USER = env("EMAIL_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_PASS")
+ADMINS = env("ADMINS")
 EMAIL_FILE_PATH = "mail_dir"  # change this to a proper location
-DEFAULT_FROM_EMAIL = "ashkan.taravati@gmail.com"
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 
 LANGUAGE_CODE = "en-us"  # "fa-ir"
 

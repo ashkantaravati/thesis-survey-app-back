@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from .models import Organization
+from django.conf import settings
 
 # method for updating
 @receiver(post_save, sender=Organization, dispatch_uid="send_email_upon_org_reg")
@@ -25,7 +26,7 @@ def send_email_upon_org_reg(sender, instance, created, **kwargs):
             plain_message,
             recipient_list=[to],
             html_message=html_message,
-            from_email=None,
+            from_email=settings.DEFAULT_FROM_EMAIL,
         )
     # mark as email sent
     # instance.email_sent = True
