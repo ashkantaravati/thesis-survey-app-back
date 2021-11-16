@@ -15,6 +15,7 @@ django-cors-headers = "*"
 pingouin = "*"
 pandas = "*"
 django-extensions = "*"
+django-environ = "*"
 
 [requires]
 python_version = "3.7"
