@@ -1,4 +1,8 @@
 from django.contrib import admin
+
+from main.models.team_effectiveness_survey_response import (
+    TeamEffectivenessSurveyResponse,
+)
 from .actions import export_as_json, export_as_csv
 from .models import (
     Organization,
@@ -75,6 +79,11 @@ class TeamCoordinationSurveyResponseInline(admin.StackedInline):
     can_delete = False
 
 
+class TeamEffectivenessSurveyResponseInline(admin.StackedInline):
+    model = TeamEffectivenessSurveyResponse
+    can_delete = False
+
+
 class VoiceEvaluationsAboutParticipantInline(admin.TabularInline):
     model = TeamMemberVoiceEvaluationByParticipant
     can_delete = False
@@ -115,6 +124,7 @@ class ParticipantTeamMemberAdmin(admin.ModelAdmin):
         GeneralSurveyResponseInline,
         OverconfidenceSurveyResponseInline,
         TeamCoordinationSurveyResponseInline,
+        TeamEffectivenessSurveyResponseInline,
         VoiceEvaluationsAboutParticipantInline,
         VoiceEvaluationsByParticipantInline,
     ]
