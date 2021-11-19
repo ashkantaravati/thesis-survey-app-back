@@ -6,6 +6,7 @@ from main.models import (
     GeneralSurveyResponse,
     TeamCoordinationSurveyResponse,
     OverconfidenceSurveyResponse,
+    TeamEffectivenessSurveyResponse,
 )
 from hashid_field.rest import HashidSerializerCharField
 
@@ -45,11 +46,18 @@ class OverconfidenceSurveyResponseSerializer(serializers.ModelSerializer):
         exclude = ["participant"]
 
 
+class TeamEffectivenessSurveyResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeamEffectivenessSurveyResponse
+        exclude = ["participant"]
+
+
 class TeamMemberParticipationSerializer(serializers.ModelSerializer):
     voice_survey_responses = VoiceEvaluationSerializer(many=True)
     general_survey_response = GeneralSurveyResponseSerializer()
     overconfidence_survey_response = OverconfidenceSurveyResponseSerializer()
     team_coordination_survey_response = TeamCoordinationSurveyResponseSerializer()
+    team_effectiveness_survey_response = TeamEffectivenessSurveyResponseSerializer()
 
     id = HashidSerializerCharField(read_only=True)
     name = serializers.CharField(read_only=True)
@@ -104,6 +112,15 @@ class TeamMemberParticipationSerializer(serializers.ModelSerializer):
                 created_team_coordination_response,
             ) = TeamCoordinationSurveyResponse.objects.get_or_create(
                 participant=instance, **team_coordination_survey_response
+            )
+            team_effectiveness_survey_response = validated_data.get(
+                "team_effectiveness_survey_response"
+            )
+            (
+                _,
+                created_team_effectiveness_response,
+            ) = TeamEffectivenessSurveyResponse.objects.get_or_create(
+                participant=instance, **team_effectiveness_survey_response
             )
             instance.has_participated = True
             instance.save(force_update=True)
