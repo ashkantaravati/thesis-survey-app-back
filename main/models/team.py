@@ -150,4 +150,5 @@ class Team(models.Model):
             "average_member_team_history": self.average_member_team_history,
             "average_voice_behavior": self.average_voice_behavior,
             "average_team_coordination": self.average_team_coordination,
+            "average_team_effectiveness": self.average_team_effectiveness,
         }

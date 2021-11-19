@@ -31,8 +31,10 @@ class ParticipantTeamMember(models.Model):
         return record
 
     def effectiveness_ratings_as_record(self) -> ICCFrameRecord:
-        record = self.team_effectiveness_survey_response.as_record()
-        return record
+        try:
+            return self.team_effectiveness_survey_response.as_record()
+        except:
+            return (self.id.hashid, self.team.id.hashid, 0)
 
     @property
     @display(
@@ -86,4 +88,4 @@ class ParticipantTeamMember(models.Model):
         description="Opinion on Team Effectiveness Score",
     )
     def opinion_on_team_effectiveness_score(self):
-        return self.team_effectiveness_survey_response.score
+        return self.team_effectiveness_survey_response
