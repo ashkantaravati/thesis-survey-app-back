@@ -121,6 +121,21 @@ class Team(models.Model):
 
         return "N/A"
 
+    @property
+    @display(
+        description="Team Effectiveness",
+    )
+    def average_team_effectiveness(self):
+        if self.queried_members and self.effectiveness_ratings_are_reliable():
+            scores = [
+                member.opinion_on_team_effectiveness_score
+                for member in self.queried_members
+                if member.opinion_on_team_effectiveness_score
+            ]
+            return get_mean_value_of_list(scores)
+
+        return "N/A"
+
     def __str__(self) -> str:
         return f"{self.name} مربوط به {self.organization}"
 
