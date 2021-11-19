@@ -1,8 +1,6 @@
 from django.contrib import admin
 
-from main.models.team_effectiveness_survey_response import (
-    TeamEffectivenessSurveyResponse,
-)
+
 from .actions import export_as_json, export_as_csv
 from .models import (
     Organization,
@@ -12,6 +10,7 @@ from .models import (
     GeneralSurveyResponse,
     OverconfidenceSurveyResponse,
     TeamCoordinationSurveyResponse,
+    TeamEffectivenessSurveyResponse,
 )
 
 
