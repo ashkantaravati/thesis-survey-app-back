@@ -36,6 +36,12 @@ class Team(models.Model):
             records.append(member.coordination_ratings_as_record())
         return records
 
+    def effectiveness_ratings_as_records(self) -> ListOfICCFrameRecord:
+        records = []
+        for member in self.members.all():
+            records.append(member.effectiveness_ratings_as_record())
+        return records
+
     def voice_ratings_are_reliable(self):
         df = create_data_frame_for_icc(self.voice_ratings_as_records())
         return check_interrater_reliability_with_icc(df)
