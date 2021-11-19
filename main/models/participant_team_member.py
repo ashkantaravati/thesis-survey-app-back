@@ -30,6 +30,10 @@ class ParticipantTeamMember(models.Model):
         record = self.team_coordination_survey_response.as_record()
         return record
 
+    def effectiveness_ratings_as_record(self) -> ICCFrameRecord:
+        record = self.team_effectiveness_survey_response.as_record()
+        return record
+
     @property
     @display(
         description="Average Voice Behavior Score by Teammate evaluations",
@@ -76,3 +80,10 @@ class ParticipantTeamMember(models.Model):
     )
     def opinion_on_team_coordination_score(self):
         return self.team_coordination_survey_response.score
+
+    @property
+    @display(
+        description="Opinion on Team Effectiveness Score",
+    )
+    def opinion_on_team_effectiveness_score(self):
+        return self.team_effectiveness_survey_response.score
