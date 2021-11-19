@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from email.utils import getaddresses
 import environ
 import os
 
@@ -8,7 +8,7 @@ env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
@@ -122,7 +122,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env("EMAIL_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_PASS")
-ADMINS = env("ADMINS")
+ADMINS = getaddresses([env("ADMINS")])
 EMAIL_FILE_PATH = "mail_dir"  # change this to a proper location
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 
