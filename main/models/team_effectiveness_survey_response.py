@@ -3,6 +3,8 @@ from django.db import models
 from main.typing import ICCFrameRecord
 from .participant_team_member import ParticipantTeamMember
 
+SCALE = 7  # 7-point scale likert
+
 
 class TeamEffectivenessSurveyResponse(models.Model):
     question_1 = models.IntegerField(null=True, blank=True)
@@ -38,4 +40,4 @@ class TeamEffectivenessSurveyResponse(models.Model):
             + self.question_8
             + self.question_9
             + self.question_10
-        ) / 5
+        ) / SCALE
