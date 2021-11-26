@@ -10,6 +10,8 @@ from main.calculations import (
     get_mean_value_of_list,
 )
 
+ERROR_FLAG = "N/A"
+
 
 class Team(models.Model):
     id = HashidAutoField(primary_key=True)
@@ -36,12 +38,28 @@ class Team(models.Model):
             records.append(member.coordination_ratings_as_record())
         return records
 
+    def effectiveness_ratings_as_records(self) -> ListOfICCFrameRecord:
+        records = []
+        for member in self.members.all():
+            records.append(member.effectiveness_ratings_as_record())
+        return records
+
     def voice_ratings_are_reliable(self):
-        df = create_data_frame_for_icc(self.voice_ratings_as_records())
+        record = self.voice_ratings_as_records()
+        survey_per_submission = self.number_of_members
+        total_number_of_records_submitted = len(record)
+        if total_number_of_records_submitted % survey_per_submission != 0:
+            # unbalanced number of records detected
+            return False, 0.0
+        df = create_data_frame_for_icc(record)
         return check_interrater_reliability_with_icc(df)
 
     def coordination_ratings_are_reliable(self):
         df = create_data_frame_for_icc(self.coordination_ratings_as_records())
+        return check_interrater_reliability_with_icc(df)
+
+    def effectiveness_ratings_are_reliable(self):
+        df = create_data_frame_for_icc(self.effectiveness_ratings_as_records())
         return check_interrater_reliability_with_icc(df)
 
     @property
@@ -94,7 +112,7 @@ class Team(models.Model):
             mean = get_mean_value_of_list(scores_for_member_with_scores)
             if mean:
                 return mean
-        return "N/A"
+        return ERROR_FLAG
 
     @property
     @display(
@@ -109,7 +127,22 @@ class Team(models.Model):
             ]
             return get_mean_value_of_list(scores)
 
-        return "N/A"
+        return ERROR_FLAG
+
+    @property
+    @display(
+        description="Team Effectiveness",
+    )
+    def average_team_effectiveness(self):
+        if self.queried_members and self.effectiveness_ratings_are_reliable():
+            scores = [
+                member.opinion_on_team_effectiveness_score
+                for member in self.queried_members
+                if member.opinion_on_team_effectiveness_score
+            ]
+            return get_mean_value_of_list(scores)
+
+        return ERROR_FLAG
 
     def __str__(self) -> str:
         return f"{self.name} مربوط به {self.organization}"
@@ -125,4 +158,5 @@ class Team(models.Model):
             "average_member_team_history": self.average_member_team_history,
             "average_voice_behavior": self.average_voice_behavior,
             "average_team_coordination": self.average_team_coordination,
+            "average_team_effectiveness": self.average_team_effectiveness,
         }

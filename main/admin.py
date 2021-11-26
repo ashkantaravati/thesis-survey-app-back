@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+
 from .actions import export_as_json, export_as_csv
 from .models import (
     Organization,
@@ -8,6 +10,7 @@ from .models import (
     GeneralSurveyResponse,
     OverconfidenceSurveyResponse,
     TeamCoordinationSurveyResponse,
+    TeamEffectivenessSurveyResponse,
 )
 
 
@@ -44,6 +47,7 @@ class TeamAdmin(admin.ModelAdmin):
         "average_member_team_history",
         "average_voice_behavior",
         "average_team_coordination",
+        "average_team_effectiveness",
     )
 
     readonly_fields = (
@@ -54,6 +58,7 @@ class TeamAdmin(admin.ModelAdmin):
         "average_member_team_history",
         "average_voice_behavior",
         "average_team_coordination",
+        "average_team_effectiveness",
     )
 
     inlines = [
@@ -72,6 +77,11 @@ class OverconfidenceSurveyResponseInline(admin.StackedInline):
 
 class TeamCoordinationSurveyResponseInline(admin.StackedInline):
     model = TeamCoordinationSurveyResponse
+    can_delete = False
+
+
+class TeamEffectivenessSurveyResponseInline(admin.StackedInline):
+    model = TeamEffectivenessSurveyResponse
     can_delete = False
 
 
@@ -115,6 +125,7 @@ class ParticipantTeamMemberAdmin(admin.ModelAdmin):
         GeneralSurveyResponseInline,
         OverconfidenceSurveyResponseInline,
         TeamCoordinationSurveyResponseInline,
+        TeamEffectivenessSurveyResponseInline,
         VoiceEvaluationsAboutParticipantInline,
         VoiceEvaluationsByParticipantInline,
     ]
