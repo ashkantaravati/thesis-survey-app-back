@@ -1,4 +1,5 @@
 from django.db import models
+from main.calculations import round_as_default
 
 from main.typing import ICCFrameRecord
 from .participant_team_member import ParticipantTeamMember
@@ -21,10 +22,12 @@ class TeamCoordinationSurveyResponse(models.Model):
 
     @property
     def score(self):
-        return (
+        raw_score = (
             self.question_1
             + self.question_2
             + self.question_3
             + self.question_4
             + self.question_5
         ) / 5
+        rounded_score = round_as_default(raw_score)
+        return rounded_score

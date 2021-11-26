@@ -1,4 +1,5 @@
 from django.db import models
+from main.calculations import round_as_default
 
 from main.typing import ICCFrameRecord
 from .participant_team_member import ParticipantTeamMember
@@ -44,7 +45,7 @@ class TeamMemberVoiceEvaluationByParticipant(models.Model):
             and self.question_5
             and self.question_6
         ):
-            return (
+            raw_score = (
                 self.question_1
                 + self.question_2
                 + self.question_3
@@ -52,6 +53,8 @@ class TeamMemberVoiceEvaluationByParticipant(models.Model):
                 + self.question_5
                 + self.question_6
             ) / 6
+            rounded_score = round_as_default(raw_score)
+            return rounded_score
 
     def __str__(self) -> str:
         return f"نظر {self.evaluating_participant} درباره‌ی رفتار صدای {self.evaluated_participant}"
