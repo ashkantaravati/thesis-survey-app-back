@@ -88,4 +88,4 @@ class ParticipantTeamMember(models.Model):
         description="Opinion on Team Effectiveness Score",
     )
     def opinion_on_team_effectiveness_score(self):
-        return self.team_effectiveness_survey_response
+        return self.team_effectiveness_survey_response.score
