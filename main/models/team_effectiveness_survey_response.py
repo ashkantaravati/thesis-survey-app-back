@@ -40,4 +40,4 @@ class TeamEffectivenessSurveyResponse(models.Model):
             + self.question_8
             + self.question_9
             + self.question_10
-        ) / SCALE
+        ) / 10
