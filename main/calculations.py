@@ -31,3 +31,7 @@ def get_mean_value_of_list(values: "list[float]") -> float:
     if values:
         return round(sum(values) / len(values), DECIMAL_PLACES)
     return 0.0
+
+
+def round_as_default(value: float) -> float:
+    return round(value, DECIMAL_PLACES)
