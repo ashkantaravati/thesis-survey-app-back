@@ -43,7 +43,13 @@ class Team(models.Model):
         return records
 
     def voice_ratings_are_reliable(self):
-        df = create_data_frame_for_icc(self.voice_ratings_as_records())
+        record = self.voice_ratings_as_records()
+        survey_per_submission = self.number_of_members
+        total_number_of_records_submitted = len(record)
+        if total_number_of_records_submitted % survey_per_submission != 0:
+            # unbalanced number of records detected
+            return False, 0.0
+        df = create_data_frame_for_icc(record)
         return check_interrater_reliability_with_icc(df)
 
     def coordination_ratings_are_reliable(self):
