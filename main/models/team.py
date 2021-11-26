@@ -10,6 +10,8 @@ from main.calculations import (
     get_mean_value_of_list,
 )
 
+ERROR_FLAG = "N/A"
+
 
 class Team(models.Model):
     id = HashidAutoField(primary_key=True)
@@ -110,7 +112,7 @@ class Team(models.Model):
             mean = get_mean_value_of_list(scores_for_member_with_scores)
             if mean:
                 return mean
-        return "N/A"
+        return ERROR_FLAG
 
     @property
     @display(
@@ -125,7 +127,7 @@ class Team(models.Model):
             ]
             return get_mean_value_of_list(scores)
 
-        return "N/A"
+        return ERROR_FLAG
 
     @property
     @display(
@@ -140,7 +142,7 @@ class Team(models.Model):
             ]
             return get_mean_value_of_list(scores)
 
-        return "N/A"
+        return ERROR_FLAG
 
     def __str__(self) -> str:
         return f"{self.name} مربوط به {self.organization}"
