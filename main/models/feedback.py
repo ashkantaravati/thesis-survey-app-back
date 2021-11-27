@@ -9,3 +9,6 @@ class Feedback(models.Model):
         on_delete=models.CASCADE,
         related_name="feedback",
     )
+
+    def __str__(self):
+        return f"{self.participant}:{self.response}"
