@@ -60,7 +60,7 @@ class TeamMemberParticipationSerializer(serializers.ModelSerializer):
     overconfidence_survey_response = OverconfidenceSurveyResponseSerializer()
     team_coordination_survey_response = TeamCoordinationSurveyResponseSerializer()
     team_effectiveness_survey_response = TeamEffectivenessSurveyResponseSerializer()
-    feedback_response = serializers.CharField(required=False)
+    feedback_response = serializers.CharField(required=False, allow_blank=True)
 
     id = HashidSerializerCharField(read_only=True)
     name = serializers.CharField(read_only=True)
