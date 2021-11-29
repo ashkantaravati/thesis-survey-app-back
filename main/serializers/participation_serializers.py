@@ -10,6 +10,8 @@ from main.models import (
 )
 from hashid_field.rest import HashidSerializerCharField
 
+from main.models.feedback import Feedback
+
 
 class ParticipantTeamMemberSerializer(serializers.ModelSerializer):
     id = HashidSerializerCharField()
@@ -58,6 +60,7 @@ class TeamMemberParticipationSerializer(serializers.ModelSerializer):
     overconfidence_survey_response = OverconfidenceSurveyResponseSerializer()
     team_coordination_survey_response = TeamCoordinationSurveyResponseSerializer()
     team_effectiveness_survey_response = TeamEffectivenessSurveyResponseSerializer()
+    feedback_response = serializers.CharField(required=False)
 
     id = HashidSerializerCharField(read_only=True)
     name = serializers.CharField(read_only=True)
@@ -122,6 +125,11 @@ class TeamMemberParticipationSerializer(serializers.ModelSerializer):
             ) = TeamEffectivenessSurveyResponse.objects.get_or_create(
                 participant=instance, **team_effectiveness_survey_response
             )
+            feedback_response = validated_data.get("feedback_response")
+            if feedback_response:
+                _, created_feedback = Feedback.objects.get_or_create(
+                    participant=instance, response=feedback_response
+                )
             instance.has_participated = True
             instance.save(force_update=True)
         except Exception as e:
