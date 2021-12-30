@@ -1,4 +1,4 @@
-from rest_framework.response import Response
+from rest_framework.response import Response as APIResponse
 from rest_framework.views import APIView
 from .models import Organization, Response, Team
 
@@ -39,7 +39,7 @@ class StatsView(APIView):
                 for org in orgs
             ],
         }
-        return Response(stats)
+        return APIResponse(stats)
 
 
 class DashboardView(APIView):
