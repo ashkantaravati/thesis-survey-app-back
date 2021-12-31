@@ -5,13 +5,7 @@ from .actions import export_as_json, export_as_csv
 from .models import (
     Organization,
     Team,
-    ParticipantTeamMember,
-    TeamMemberVoiceEvaluationByParticipant,
-    GeneralSurveyResponse,
-    OverconfidenceSurveyResponse,
-    TeamCoordinationSurveyResponse,
-    TeamEffectivenessSurveyResponse,
-    Feedback,
+    Response,
 )
 
 
@@ -29,8 +23,8 @@ class OrganizationAdmin(admin.ModelAdmin):
     ]
 
 
-class TeamMemberInline(admin.StackedInline):
-    model = ParticipantTeamMember
+class ResponseInline(admin.StackedInline):
+    model = Response
     exclude = ["organization"]
     can_delete = False
 
@@ -41,98 +35,77 @@ class TeamAdmin(admin.ModelAdmin):
         "id",
         "name",
         "organization",
-        "number_of_members",
-        "number_of_participated_members",
-        "average_member_age",
-        "average_member_tenure",
-        "average_member_team_history",
-        "average_voice_behavior",
-        "average_team_coordination",
-        "average_team_effectiveness",
+        "has_participated",
+        "number_of_responses",
+        "mean_age",
+        "mean_tenure",
+        "mean_team_history",
+        "mean_voice_behavior",
+        "mean_team_coordination",
+        "mean_team_effectiveness",
     )
 
     readonly_fields = (
-        "number_of_members",
-        "number_of_participated_members",
-        "average_member_age",
-        "average_member_tenure",
-        "average_member_team_history",
-        "average_voice_behavior",
-        "average_team_coordination",
-        "average_team_effectiveness",
-    )
-
-    inlines = [
-        TeamMemberInline,
-    ]
-
-
-class GeneralSurveyResponseInline(admin.StackedInline):
-    model = GeneralSurveyResponse
-
-
-class OverconfidenceSurveyResponseInline(admin.StackedInline):
-    model = OverconfidenceSurveyResponse
-    can_delete = False
-
-
-class TeamCoordinationSurveyResponseInline(admin.StackedInline):
-    model = TeamCoordinationSurveyResponse
-    can_delete = False
-
-
-class TeamEffectivenessSurveyResponseInline(admin.StackedInline):
-    model = TeamEffectivenessSurveyResponse
-    can_delete = False
-
-
-class VoiceEvaluationsAboutParticipantInline(admin.TabularInline):
-    model = TeamMemberVoiceEvaluationByParticipant
-    can_delete = False
-    fk_name = "evaluated_participant"
-    exclude = ("team",)
-    readonly_fields = ("score",)
-    verbose_name = "Voice behavior evaluation by teammate about this participant"
-    verbose_name_plural = (
-        "Voice behavior evaluations by teammates about this participant"
-    )
-
-
-class VoiceEvaluationsByParticipantInline(admin.TabularInline):
-    model = TeamMemberVoiceEvaluationByParticipant
-    can_delete = False
-    fk_name = "evaluating_participant"
-    exclude = ("team",)
-    readonly_fields = ("score",)
-    verbose_name = "Voice behavior evaluation by this participant about teammate"
-    verbose_name_plural = (
-        "Voice behavior evaluations by this participant about teammates"
-    )
-
-
-@admin.register(ParticipantTeamMember)
-class ParticipantTeamMemberAdmin(admin.ModelAdmin):
-    list_display = (
         "id",
-        "name",
-        "team",
-        "organization",
-        "average_voice_behavior_score",
+        "has_participated",
+        "number_of_responses",
+        "mean_age",
+        "mean_tenure",
+        "mean_team_history",
+        "mean_voice_behavior",
+        "mean_team_coordination",
+        "mean_team_effectiveness",
     )
 
-    readonly_fields = ["average_voice_behavior_score"]
 
-    inlines = [
-        GeneralSurveyResponseInline,
-        OverconfidenceSurveyResponseInline,
-        TeamCoordinationSurveyResponseInline,
-        TeamEffectivenessSurveyResponseInline,
-        VoiceEvaluationsAboutParticipantInline,
-        VoiceEvaluationsByParticipantInline,
-    ]
+@admin.register(Response)
+class ResponseAdmin(admin.ModelAdmin):
+    list_display = ("id", "team", "sex", "age", "created_at")
+
+    readonly_fields = (
+        "overconfidence_question_one_lower",
+        "overconfidence_question_one_upper",
+        "overconfidence_question_two_lower",
+        "overconfidence_question_two_upper",
+        "overconfidence_question_three_lower",
+        "overconfidence_question_three_upper",
+        "overconfidence_question_four_lower",
+        "overconfidence_question_four_upper",
+        "overconfidence_question_five_lower",
+        "overconfidence_question_five_upper",
+        "overconfidence_question_six_lower",
+        "overconfidence_question_six_upper",
+        "overconfidence_question_seven_lower",
+        "overconfidence_question_seven_upper",
+        "overconfidence_question_eight_lower",
+        "overconfidence_question_eight_upper",
+        "overconfidence_question_nine_lower",
+        "overconfidence_question_nine_upper",
+        "overconfidence_question_ten_lower",
+        "overconfidence_question_ten_upper",
+        "team_coordination_question_one",
+        "team_coordination_question_two",
+        "team_coordination_question_three",
+        "team_coordination_question_four",
+        "team_coordination_question_five",
+        "team_effectiveness_question_one",
+        "team_effectiveness_question_two",
+        "team_effectiveness_question_three",
+        "team_effectiveness_question_four",
+        "team_effectiveness_question_five",
+        "team_effectiveness_question_six",
+        "team_effectiveness_question_seven",
+        "team_effectiveness_question_eight",
+        "team_effectiveness_question_nine",
+        "team_effectiveness_question_ten",
+        "voice_question_one",
+        "voice_question_two",
+        "voice_question_three",
+        "voice_question_four",
+        "voice_question_five",
+        "voice_question_six",
+    )
 
 
 admin.site.add_action(export_as_json, "export_as_json")
 admin.site.add_action(export_as_csv, "export_as_csv")
-admin.site.register(TeamMemberVoiceEvaluationByParticipant)
-admin.site.register(Feedback)
