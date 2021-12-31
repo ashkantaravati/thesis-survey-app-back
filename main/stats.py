@@ -26,7 +26,7 @@ class StatsView(APIView):
                 "target_team_size": TARGET,
                 "number_of_registered_teams": len(teams),
                 "number_of_participated_teams": len(participated_teams),
-                "number_of_registered_responses": len(responses),
+                "number_of_submitted_responses": len(responses),
                 "number_of_registered_organizations": len(orgs),
                 "number_of_participated_organizations": len(participated_orgs),
             },
