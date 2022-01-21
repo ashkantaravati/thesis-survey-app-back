@@ -8,6 +8,7 @@ from main.calculations import (
     create_data_frame_for_icc,
     check_interrater_reliability_with_icc,
     get_mean_value_of_list,
+    round_as_default,
 )
 
 ERROR_FLAG = "N/A"
@@ -44,6 +45,13 @@ class Team(models.Model):
     @property
     def has_participated(self):
         return self.responses.count() > 0
+
+    @property
+    @display(
+        description="Response Rate",
+    )
+    def response_rate(self):
+        return round_as_default(self.number_of_responses / self.size * 100)
 
     @property
     @display(
