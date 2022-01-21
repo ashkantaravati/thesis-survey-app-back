@@ -12,6 +12,7 @@ from main.calculations import (
 )
 
 ERROR_FLAG = "N/A"
+MIN_REQUIRED_RESPONSE_RATE = 0.5
 
 
 class Team(models.Model):
@@ -44,14 +45,14 @@ class Team(models.Model):
 
     @property
     def has_participated(self):
-        return self.responses.count() > 0
+        return self.response_rate >= MIN_REQUIRED_RESPONSE_RATE
 
     @property
     @display(
         description="Response Rate",
     )
     def response_rate(self):
-        return round_as_default(self.number_of_responses / self.size * 100)
+        return round_as_default(self.number_of_responses / self.size)
 
     @property
     @display(
