@@ -35,6 +35,7 @@ class TeamAdmin(admin.ModelAdmin):
         "id",
         "name",
         "organization",
+        "size",
         "has_participated",
         "number_of_responses",
         "mean_age",
