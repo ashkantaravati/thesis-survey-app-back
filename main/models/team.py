@@ -123,6 +123,7 @@ class Team(models.Model):
             "team": self.id,
             "org": self.organization.id,
             "team_size": self.size,
+            "response_rate": self.response_rate,
             "response_count": self.number_of_responses,
             "mean_age": self.mean_age,
             "mean_tenure": self.mean_tenure,
