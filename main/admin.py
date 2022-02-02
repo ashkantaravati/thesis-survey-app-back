@@ -2,11 +2,7 @@ from django.contrib import admin
 
 
 from .actions import export_as_json, export_as_csv
-from .models import (
-    Organization,
-    Team,
-    Response,
-)
+from .models import Organization, Team, Response, OverconfidenceQuiz
 
 
 class TeamInline(admin.StackedInline):
@@ -62,11 +58,18 @@ class TeamAdmin(admin.ModelAdmin):
 
 @admin.register(Response)
 class ResponseAdmin(admin.ModelAdmin):
-    list_display = ("id", "team", "sex", "age", "created_at")
+    list_display = (
+        "id",
+        "team",
+        "sex",
+        "age",
+        "created_at",
+    )
 
     readonly_fields = (
         "overconfidence_question_one_lower",
         "overconfidence_question_one_upper",
+        "overconfidence_question_one_outcome",
         "overconfidence_question_two_lower",
         "overconfidence_question_two_upper",
         "overconfidence_question_three_lower",
@@ -109,5 +112,49 @@ class ResponseAdmin(admin.ModelAdmin):
     )
 
 
+class OverconfidenceQuizAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "team",
+        "sex",
+        "age",
+        "created_at",
+    )
+
+    fields = (
+        "overconfidence_question_one_lower",
+        "overconfidence_question_one_upper",
+        "overconfidence_question_one_outcome",
+        "overconfidence_question_two_lower",
+        "overconfidence_question_two_upper",
+        "overconfidence_question_two_outcome",
+        "overconfidence_question_three_lower",
+        "overconfidence_question_three_upper",
+        "overconfidence_question_three_outcome",
+        "overconfidence_question_four_lower",
+        "overconfidence_question_four_upper",
+        "overconfidence_question_four_outcome",
+        "overconfidence_question_five_lower",
+        "overconfidence_question_five_upper",
+        "overconfidence_question_five_outcome",
+        "overconfidence_question_six_lower",
+        "overconfidence_question_six_upper",
+        "overconfidence_question_six_outcome",
+        "overconfidence_question_seven_lower",
+        "overconfidence_question_seven_upper",
+        "overconfidence_question_seven_outcome",
+        "overconfidence_question_eight_lower",
+        "overconfidence_question_eight_upper",
+        "overconfidence_question_eight_outcome",
+        "overconfidence_question_nine_lower",
+        "overconfidence_question_nine_upper",
+        "overconfidence_question_nine_outcome",
+        "overconfidence_question_ten_lower",
+        "overconfidence_question_ten_upper",
+        "overconfidence_question_ten_outcome",
+    )
+
+
+admin.site.register(OverconfidenceQuiz, OverconfidenceQuizAdmin)
 admin.site.add_action(export_as_json, "export_as_json")
 admin.site.add_action(export_as_csv, "export_as_csv")

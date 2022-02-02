@@ -1,3 +1,4 @@
+from random import choices
 from django.db import models
 from main.calculations import round_as_default
 
@@ -7,6 +8,11 @@ from hashid_field.field import HashidAutoField
 from main.typing import ICCFrameRecord, ListOfICCFrameRecord
 
 SEX_CHOICES = [("male", "آقا"), ("female", "خانم")]
+OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES = [
+    (-1, "Too Broad: Underconfident"),
+    (0, "OK"),
+    (1, "Miss: Overconfident"),
+]
 
 
 class Response(models.Model):
@@ -24,26 +30,106 @@ class Response(models.Model):
     team_history = models.IntegerField(default=0)
 
     # Overconfidence Survey
-    overconfidence_question_one_lower = models.IntegerField()
+    overconfidence_question_one_lower = models.IntegerField(
+        verbose_name="کشور ایران در حال حاضر (سال ۱۴۰۰) چند استان دارد؟"
+    )
     overconfidence_question_one_upper = models.IntegerField()
-    overconfidence_question_two_lower = models.IntegerField()
+    overconfidence_question_one_outcome = models.IntegerField(
+        choices=OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Outcome (31)",
+    )
+    overconfidence_question_two_lower = models.IntegerField(
+        verbose_name="در چه سالی تلفن همراه اپل با نام iPhone برای اولین بار عرضه شد؟"
+    )
     overconfidence_question_two_upper = models.IntegerField()
-    overconfidence_question_three_lower = models.IntegerField()
+    overconfidence_question_two_outcome = models.IntegerField(
+        choices=OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Outcome (2007 | 1386-7)",
+    )
+    overconfidence_question_three_lower = models.IntegerField(
+        verbose_name="در اروپا چند کشور وجود دارد (که سازمان ملل به رسمیت می‌شناسد)؟"
+    )
     overconfidence_question_three_upper = models.IntegerField()
-    overconfidence_question_four_lower = models.IntegerField()
+    overconfidence_question_three_outcome = models.IntegerField(
+        choices=OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Outcome (44)",
+    )
+    overconfidence_question_four_lower = models.IntegerField(
+        verbose_name="ویندوز XP در چه سالی عرضه شد؟"
+    )
     overconfidence_question_four_upper = models.IntegerField()
-    overconfidence_question_five_lower = models.IntegerField()
+    overconfidence_question_four_outcome = models.IntegerField(
+        choices=OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Outcome (2000 | 1380)",
+    )
+    overconfidence_question_five_lower = models.IntegerField(
+        verbose_name="چند کشور در آمریکای شمالی وجود دارد؟"
+    )
     overconfidence_question_five_upper = models.IntegerField()
-    overconfidence_question_six_lower = models.IntegerField()
+    overconfidence_question_five_outcome = models.IntegerField(
+        choices=OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Outcome (23)",
+    )
+    overconfidence_question_six_lower = models.IntegerField(
+        verbose_name="وب جهانی (WWW) در چه سالی اختراع شد؟"
+    )
     overconfidence_question_six_upper = models.IntegerField()
-    overconfidence_question_seven_lower = models.IntegerField()
+    overconfidence_question_six_outcome = models.IntegerField(
+        choices=OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Outcome (1989 | 1368)",
+    )
+    overconfidence_question_seven_lower = models.IntegerField(
+        verbose_name="اولین موتور جستجوی وب در چه سالی ساخته شد؟"
+    )
     overconfidence_question_seven_upper = models.IntegerField()
-    overconfidence_question_eight_lower = models.IntegerField()
+    overconfidence_question_seven_outcome = models.IntegerField(
+        choices=OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Outcome (1993~1998 | 1371~1377)",
+    )
+    overconfidence_question_eight_lower = models.IntegerField(
+        verbose_name="انسان بالغ به طور میانگین چند دندان دارد؟"
+    )
     overconfidence_question_eight_upper = models.IntegerField()
-    overconfidence_question_nine_lower = models.IntegerField()
+    overconfidence_question_eight_outcome = models.IntegerField(
+        choices=OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Outcome (32)",
+    )
+    overconfidence_question_nine_lower = models.IntegerField(
+        verbose_name="مسافت تهران تا مشهد چند کیلومتر است؟"
+    )
     overconfidence_question_nine_upper = models.IntegerField()
-    overconfidence_question_ten_lower = models.IntegerField()
+    overconfidence_question_nine_outcome = models.IntegerField(
+        choices=OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Outcome (899~926)",
+    )
+    overconfidence_question_ten_lower = models.IntegerField(
+        verbose_name="قدمت (سن) برج آزادی تهران چند سال است؟"
+    )
     overconfidence_question_ten_upper = models.IntegerField()
+    overconfidence_question_ten_outcome = models.IntegerField(
+        choices=OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Outcome (50)",
+    )
     # Team Coordination Survey
     team_coordination_question_one = models.IntegerField()
     team_coordination_question_two = models.IntegerField()
