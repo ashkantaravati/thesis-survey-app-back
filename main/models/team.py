@@ -66,6 +66,8 @@ class Team(models.Model):
     @property
     @display(description="Mean Overconfidence Score")
     def mean_overconfidence_score(self):
+        if not self.has_participated:
+            return "N/A"
         overconfidence_scores = [
             response.overconfidence_score for response in self.responses.all()
         ]
