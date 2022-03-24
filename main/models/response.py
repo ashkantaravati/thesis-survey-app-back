@@ -1,18 +1,17 @@
 from random import choices
 from django.db import models
-from main.calculations import round_as_default
+from main.calculations import determine_overconfidence_score, round_as_default
+from main.constants import (
+    OVERCONFIDENCE_QUIZ_ACCEPTABLE_RANGE,
+    OVERCONFIDENCE_QUIZ_CORRECT_ANSWERS,
+    OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES,
+    SEX_CHOICES,
+)
 
 from .team import Team
 from django.contrib.admin import display
 from hashid_field.field import HashidAutoField
 from main.typing import ICCFrameRecord, ListOfICCFrameRecord
-
-SEX_CHOICES = [("male", "آقا"), ("female", "خانم")]
-OVERCONFIDENCE_QUIZ_OUTCOME_CHOICES = [
-    (-1, "Too Broad: Underconfident"),
-    (0, "OK"),
-    (1, "Miss: Overconfident"),
-]
 
 
 class Response(models.Model):
@@ -161,12 +160,101 @@ class Response(models.Model):
     def __str__(self) -> str:
         return f"Response from {self.team.name}"
 
+    def get_overconfidence_quiz_responses_as_tuples(self):
+        return [
+            (
+                (
+                    self.overconfidence_question_one_lower,
+                    self.overconfidence_question_one_upper,
+                ),
+                OVERCONFIDENCE_QUIZ_ACCEPTABLE_RANGE[1],
+                OVERCONFIDENCE_QUIZ_CORRECT_ANSWERS[1],
+            ),
+            (
+                (
+                    self.overconfidence_question_two_lower,
+                    self.overconfidence_question_two_upper,
+                ),
+                OVERCONFIDENCE_QUIZ_ACCEPTABLE_RANGE[2],
+                OVERCONFIDENCE_QUIZ_CORRECT_ANSWERS[2],
+            ),
+            (
+                (
+                    self.overconfidence_question_three_lower,
+                    self.overconfidence_question_three_upper,
+                ),
+                OVERCONFIDENCE_QUIZ_ACCEPTABLE_RANGE[3],
+                OVERCONFIDENCE_QUIZ_CORRECT_ANSWERS[3],
+            ),
+            (
+                (
+                    self.overconfidence_question_four_lower,
+                    self.overconfidence_question_four_upper,
+                ),
+                OVERCONFIDENCE_QUIZ_ACCEPTABLE_RANGE[4],
+                OVERCONFIDENCE_QUIZ_CORRECT_ANSWERS[4],
+            ),
+            (
+                (
+                    self.overconfidence_question_five_lower,
+                    self.overconfidence_question_five_upper,
+                ),
+                OVERCONFIDENCE_QUIZ_ACCEPTABLE_RANGE[5],
+                OVERCONFIDENCE_QUIZ_CORRECT_ANSWERS[5],
+            ),
+            (
+                (
+                    self.overconfidence_question_six_lower,
+                    self.overconfidence_question_six_upper,
+                ),
+                OVERCONFIDENCE_QUIZ_ACCEPTABLE_RANGE[6],
+                OVERCONFIDENCE_QUIZ_CORRECT_ANSWERS[6],
+            ),
+            (
+                (
+                    self.overconfidence_question_seven_lower,
+                    self.overconfidence_question_seven_upper,
+                ),
+                OVERCONFIDENCE_QUIZ_ACCEPTABLE_RANGE[7],
+                OVERCONFIDENCE_QUIZ_CORRECT_ANSWERS[7],
+            ),
+            (
+                (
+                    self.overconfidence_question_eight_lower,
+                    self.overconfidence_question_eight_upper,
+                ),
+                OVERCONFIDENCE_QUIZ_ACCEPTABLE_RANGE[8],
+                OVERCONFIDENCE_QUIZ_CORRECT_ANSWERS[8],
+            ),
+            (
+                (
+                    self.overconfidence_question_nine_lower,
+                    self.overconfidence_question_nine_upper,
+                ),
+                OVERCONFIDENCE_QUIZ_ACCEPTABLE_RANGE[9],
+                OVERCONFIDENCE_QUIZ_CORRECT_ANSWERS[9],
+            ),
+            (
+                (
+                    self.overconfidence_question_ten_lower,
+                    self.overconfidence_question_ten_upper,
+                ),
+                OVERCONFIDENCE_QUIZ_ACCEPTABLE_RANGE[10],
+                OVERCONFIDENCE_QUIZ_CORRECT_ANSWERS[10],
+            ),
+        ]
+
     @property
     @display(
         description="Overconfidence Score",
     )
     def overconfidence_score(self) -> float:
-        pass
+        questions = self.get_overconfidence_quiz_responses_as_tuples()
+        scores = [
+            determine_overconfidence_score(minmax, range, correct_answer)
+            for (minmax, range, correct_answer) in questions
+        ]
+        return sum(scores)
 
     @property
     @display(
@@ -229,9 +317,32 @@ class Response(models.Model):
             self.team_coordination_score,
         )
 
+    def team_coordination_as_record_per_question(self) -> ListOfICCFrameRecord:
+        return [
+            (self.id.hashid, "q1", self.team_coordination_question_one),
+            (self.id.hashid, "q2", self.team_coordination_question_two),
+            (self.id.hashid, "q3", self.team_coordination_question_three),
+            (self.id.hashid, "q4", self.team_coordination_question_four),
+            (self.id.hashid, "q5", self.team_coordination_question_five),
+        ]
+
     def team_effectiveness_as_record(self) -> ICCFrameRecord:
         return (
             self.id.hashid,
             self.team.id.hashid,
             self.team_effectiveness_score,
         )
+
+    def team_effectiveness_as_record_per_question(self) -> ListOfICCFrameRecord:
+        return [
+            (self.id.hashid, "q1", self.team_effectiveness_question_one),
+            (self.id.hashid, "q2", self.team_effectiveness_question_two),
+            (self.id.hashid, "q3", self.team_effectiveness_question_three),
+            (self.id.hashid, "q4", self.team_effectiveness_question_four),
+            (self.id.hashid, "q5", self.team_effectiveness_question_five),
+            (self.id.hashid, "q6", self.team_effectiveness_question_six),
+            (self.id.hashid, "q7", self.team_effectiveness_question_seven),
+            (self.id.hashid, "q8", self.team_effectiveness_question_eight),
+            (self.id.hashid, "q9", self.team_effectiveness_question_nine),
+            (self.id.hashid, "q10", self.team_effectiveness_question_ten),
+        ]

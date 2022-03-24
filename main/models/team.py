@@ -1,5 +1,6 @@
 from django.db import models
 from hashid_field.field import HashidAutoField
+from main.constants import ERROR_FLAG, MIN_REQUIRED_RESPONSE_RATE
 
 from main.typing import ListOfICCFrameRecord
 from .organization import Organization
@@ -10,9 +11,6 @@ from main.calculations import (
     get_mean_value_of_list,
     round_as_default,
 )
-
-ERROR_FLAG = "N/A"
-MIN_REQUIRED_RESPONSE_RATE = 0.5
 
 
 class Team(models.Model):
@@ -26,21 +24,19 @@ class Team(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def coordination_ratings_are_reliable(self):
-        df = create_data_frame_for_icc(
-            [
-                response.team_coordination_as_record()
-                for response in self.responses.all()
-            ]
-        )
+        all_responses = self.responses.all()
+        records = []
+        for response in all_responses:
+            records += response.team_coordination_as_record_per_question()
+        df = create_data_frame_for_icc(records)
         return check_interrater_reliability_with_icc(df)
 
     def effectiveness_ratings_are_reliable(self):
-        df = create_data_frame_for_icc(
-            [
-                response.team_effectiveness_as_record()
-                for response in self.responses.all()
-            ]
-        )
+        all_responses = self.responses.all()
+        records = []
+        for response in all_responses:
+            records += response.team_effectiveness_as_record_per_question()
+        df = create_data_frame_for_icc(records)
         return check_interrater_reliability_with_icc(df)
 
     @property
@@ -66,6 +62,14 @@ class Team(models.Model):
     def mean_age(self):
         ages = [response.age for response in self.responses.all()]
         return get_mean_value_of_list(ages)
+
+    @property
+    @display(description="Mean Overconfidence Score")
+    def mean_overconfidence_score(self):
+        overconfidence_scores = [
+            response.overconfidence_score for response in self.responses.all()
+        ]
+        return get_mean_value_of_list(overconfidence_scores)
 
     @property
     @display(description="Mean Tenure")
@@ -94,7 +98,11 @@ class Team(models.Model):
         description="Team Coordination",
     )
     def mean_team_coordination(self):
-        if self.responses and self.coordination_ratings_are_reliable():
+        if (
+            self.has_participated
+            and self.responses
+            and self.coordination_ratings_are_reliable()
+        ):
             scores = [
                 response.team_coordination_score for response in self.responses.all()
             ]
@@ -107,7 +115,11 @@ class Team(models.Model):
         description="Team Effectiveness",
     )
     def mean_team_effectiveness(self):
-        if self.responses and self.effectiveness_ratings_are_reliable():
+        if (
+            self.has_participated
+            and self.responses
+            and self.effectiveness_ratings_are_reliable()
+        ):
             scores = [
                 response.team_effectiveness_score for response in self.responses.all()
             ]
