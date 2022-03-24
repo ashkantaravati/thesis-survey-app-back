@@ -140,6 +140,7 @@ class Team(models.Model):
             "response_count": self.number_of_responses,
             "mean_age": self.mean_age,
             "mean_tenure": self.mean_tenure,
+            "mean_overconfidence_score": self.mean_overconfidence_score,
             "mean_team_history": self.mean_team_history,
             "mean_voice_behavior": self.mean_voice_behavior,
             "mean_team_coordination": self.mean_team_coordination,
