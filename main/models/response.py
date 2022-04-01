@@ -267,7 +267,7 @@ class Response(models.Model):
     def get_overconfidence_outcomes(self, as_dict=False):
         questions = self.get_overconfidence_quiz_responses_as_tuples()
         scores = [
-            determine_overconfidence_score(minmax, range, correct_answer)
+            determine_overconfidence_score(minmax, range, correct_answer)[0]
             for (minmax, range, correct_answer) in questions
         ]
         if as_dict:

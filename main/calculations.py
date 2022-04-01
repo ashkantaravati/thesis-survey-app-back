@@ -2,11 +2,14 @@ import pingouin as pg
 import pandas as pd
 from main.constants import (
     CORRECT_ANSWER_SCORE,
+    CORRECT_ANSWER_STATUS_INDICATOR,
     DECIMAL_PLACES,
     ICC_RELIABILITY_THRESHOLD,
     ICC_TARGET_INDEX_MAP,
     OVERCONFIDENCE_SCORE,
+    OVERCONFIDENT_STATUS_INDICATOR,
     UNDERCONFIDENCE_SCORE,
+    UNDERCONFIDENT_STATUS_INDICATOR,
 )
 
 from main.typing import ListOfICCFrameRecord
@@ -96,7 +99,7 @@ def determine_overconfidence_score(
             min_max_response, reference_range
         )
         if is_underconfident:
-            return UNDERCONFIDENCE_SCORE
-        return CORRECT_ANSWER_SCORE
+            return (UNDERCONFIDENCE_SCORE, UNDERCONFIDENT_STATUS_INDICATOR)
+        return CORRECT_ANSWER_SCORE, CORRECT_ANSWER_STATUS_INDICATOR
     else:  # then it is a miss
-        return OVERCONFIDENCE_SCORE
+        return OVERCONFIDENCE_SCORE, OVERCONFIDENT_STATUS_INDICATOR
