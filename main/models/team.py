@@ -133,6 +133,15 @@ class Team(models.Model):
         return f"{self.name} مربوط به {self.organization}"
 
     @property
+    def is_useful(self):
+        return (
+            self.mean_team_coordination != ERROR_FLAG
+            and self.mean_team_effectiveness != ERROR_FLAG
+            and self.mean_overconfidence_score != "N/A"
+            and self.has_participated
+        )
+
+    @property
     def as_dict(self) -> dict:
         return {
             "team": self.id,

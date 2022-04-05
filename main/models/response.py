@@ -375,3 +375,7 @@ class Response(models.Model):
             (self.id.hashid, "q9", self.team_effectiveness_question_nine),
             (self.id.hashid, "q10", self.team_effectiveness_question_ten),
         ]
+
+    @property
+    def is_useful(self) -> bool:
+        return self.team.is_useful

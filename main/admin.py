@@ -62,6 +62,7 @@ class ResponseAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "team",
+        "is_useful",
         "sex",
         "age",
         "created_at",
