@@ -294,9 +294,9 @@ class Response(models.Model):
             (
                 self.team_coordination_question_one
                 + self.team_coordination_question_two
-                + self.team_coordination_question_three
+                + reverse_value(self.team_coordination_question_three)
                 + self.team_coordination_question_four
-                + self.team_coordination_question_five
+                + reverse_value(self.team_coordination_question_five)
             )
             / 5
         )
@@ -350,9 +350,9 @@ class Response(models.Model):
         return [
             (self.id.hashid, "q1", self.team_coordination_question_one),
             (self.id.hashid, "q2", self.team_coordination_question_two),
-            (self.id.hashid, "q3", self.team_coordination_question_three),
+            (self.id.hashid, "q3", reverse_value(self.team_coordination_question_three)),
             (self.id.hashid, "q4", self.team_coordination_question_four),
-            (self.id.hashid, "q5", self.team_coordination_question_five),
+            (self.id.hashid, "q5", reverse_value(self.team_coordination_question_five)),
         ]
 
     def team_effectiveness_as_record(self) -> ICCFrameRecord:
@@ -397,9 +397,9 @@ class Response(models.Model):
             "eff_q10": self.team_effectiveness_question_ten,
             "coord_q1": self.team_coordination_question_one,
             "coord_q2": self.team_coordination_question_two,
-            "coord_q3": self.team_coordination_question_three,
+            "coord_q3": reverse_value(self.team_coordination_question_three),
             "coord_q4": self.team_coordination_question_four,
-            "coord_q5": self.team_coordination_question_five,
+            "coord_q5": reverse_value(self.team_coordination_question_five),
             "voice_q1": self.voice_question_one,
             "voice_q2": self.voice_question_two,
             "voice_q3": self.voice_question_three,
@@ -427,3 +427,6 @@ class Response(models.Model):
             "ovconf_q10h": self.overconfidence_question_ten_upper,
             "ovconf_q10l": self.overconfidence_question_ten_lower,
         }
+def reverse_value(value, scale=5):
+    x = scale + 1
+    return x - value
