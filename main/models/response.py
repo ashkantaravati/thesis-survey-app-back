@@ -350,7 +350,11 @@ class Response(models.Model):
         return [
             (self.id.hashid, "q1", self.team_coordination_question_one),
             (self.id.hashid, "q2", self.team_coordination_question_two),
-            (self.id.hashid, "q3", reverse_value(self.team_coordination_question_three)),
+            (
+                self.id.hashid,
+                "q3",
+                reverse_value(self.team_coordination_question_three),
+            ),
             (self.id.hashid, "q4", self.team_coordination_question_four),
             (self.id.hashid, "q5", reverse_value(self.team_coordination_question_five)),
         ]
@@ -385,6 +389,12 @@ class Response(models.Model):
         return {
             "id": self.id.hashid,
             "team": self.team.id.hashid,
+            "gender": self.sex,
+            "tenure": self.tenure,
+            "team_history": self.team_history,
+            "age": self.age,
+            "overconfidence": self.overconfidence_score,
+            "voice": self.voice_behavior_score,
             "eff_q1": self.team_effectiveness_question_one,
             "eff_q2": self.team_effectiveness_question_two,
             "eff_q3": self.team_effectiveness_question_three,
@@ -427,6 +437,8 @@ class Response(models.Model):
             "ovconf_q10h": self.overconfidence_question_ten_upper,
             "ovconf_q10l": self.overconfidence_question_ten_lower,
         }
+
+
 def reverse_value(value, scale=5):
     x = scale + 1
     return x - value
