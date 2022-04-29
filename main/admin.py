@@ -27,6 +27,7 @@ class ResponseInline(admin.StackedInline):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
+    export_file_name = "teams"
     list_display = (
         "id",
         "name",
@@ -59,12 +60,15 @@ class TeamAdmin(admin.ModelAdmin):
 
 @admin.register(Response)
 class ResponseAdmin(admin.ModelAdmin):
+    export_file_name = "responses"
     list_display = (
         "id",
         "team",
         "is_useful",
         "sex",
         "age",
+        "tenure",
+        "team_history",
         "created_at",
     )
 

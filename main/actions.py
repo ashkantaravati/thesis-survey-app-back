@@ -21,7 +21,9 @@ def export_as_csv(modeladmin, request, queryset):
         data = [record.as_dict for record in queryset]
         response = HttpResponse(
             content_type="text/csv",
-            headers={"Content-Disposition": 'attachment; filename="export.csv"'},
+            headers={
+                "Content-Disposition": f'attachment; filename="{modeladmin.model_plural_name}.csv"'
+            },
         )
         writer = csv.DictWriter(response, fieldnames=data[0].keys())
         writer.writeheader()
