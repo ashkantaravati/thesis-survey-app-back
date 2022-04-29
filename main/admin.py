@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 
-from .actions import export_as_json, export_as_csv
+from .actions import export_as_csv, export_dataset_as_csv_with_autocutoff
 from .models import Organization, Team, Response, OverconfidenceQuiz
 
 
@@ -32,6 +32,7 @@ class TeamAdmin(admin.ModelAdmin):
         "id",
         "name",
         "organization",
+        "is_useful",
         "size",
         "has_participated",
         "response_rate",
@@ -198,5 +199,6 @@ class OverconfidenceQuizAdmin(admin.ModelAdmin):
 
 
 admin.site.register(OverconfidenceQuiz, OverconfidenceQuizAdmin)
-admin.site.add_action(export_as_json, "export_as_json")
+# admin.site.add_action(export_as_json, "export_as_json")
 admin.site.add_action(export_as_csv, "export_as_csv")
+admin.site.add_action(export_dataset_as_csv_with_autocutoff, "Auto CSV Dataset")
